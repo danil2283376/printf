@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 09:22:52 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/04 13:07:49 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/04 22:47:06 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -629,6 +629,93 @@ void	threatment_integer(const char *s, va_list *va_args, global_varible *g_varib
 
 #pragma region string
 
+int	output_accuracy_string(int end, char *s, global_varible *g_varible, int boolean)
+{
+	int start;
+	int length_string;
+
+	start = 0;
+	length_string = ft_strlen(s);
+	if (boolean)
+	{
+		while (start < end)
+			write(1, &s[start++], 1);
+		g_varible->length = g_varible->length + start;
+	}
+	else
+	{
+		// while (start < g_varible->accuracy)
+		// 	start++;
+		// printf("%d", g_varible->accuracy);
+		if (g_varible->accuracy <= length_string)
+			length_string = g_varible->accuracy;
+	}
+	return (length_string);
+}
+
+void	continue_string(char *s, va_list *va_args, global_varible *g_varible)
+{
+	int length_string;
+	int new_len_nbr;
+	int start;
+	int new_width;
+	int varible_value;
+
+	// length_number = len_number(number);
+	length_string = ft_strlen(s);
+	start = 0;
+	length_string = output_accuracy_string(length_string, s, g_varible, 0);
+	// printf("%d", g_varible->accuracy);
+	// printf("%d", length_string);
+	// new_len_nbr = g_varible->accuracy - length_number;
+	// printf("%s", s);
+	// if (length_string >= g_varible->accuracy)
+	// {
+	// 	varible_value = length_string - g_varible->accuracy;
+	// 	if (varible_value < 0)
+	// 		varible_value = 0;
+	// 	if (g_varible->accuracy != 0)
+	// 		length_string = length_string - varible_value;
+	// }
+	// printf("length_string: %d", length_string);
+	new_width = new_width1(g_varible->width, length_string/*, number*/);
+	if (g_varible->width >= 0)
+		output_width_int(0, new_width, g_varible);
+	// while (start < g_varible->accuracy)
+	// 	write();
+	output_accuracy_string(length_string, s, g_varible, 1);
+	// while (start < ) // вывод строки по символам
+	if (g_varible->width < 0)
+		output_width_int(0, new_width, g_varible);
+}
+
+void	threatment_string(const char *s, va_list *va_args, global_varible *g_varible)
+{
+	//смысл один и тот же просто выводить строку
+	//и при точности обрезать строку
+	char *number_from_args;
+	int value_is_null;
+
+	value_is_null = 0;
+	g_varible->width = take_width(&s[0]); // ширина
+	g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
+	// printf("accuracy: %d", g_varible->accuracy);
+	g_varible->str = &s[0]; // передал место с флагом (d)
+	substitution_value_width(&s[0], g_varible, va_args, 's');
+	substitution_value_accuracy(&s[0], g_varible, va_args);
+	number_from_args = va_arg(*va_args, char *); // строка из аргумента
+	if (number_from_args == NULL)
+	{
+		number_from_args = ft_strdup("(null)");
+		value_is_null = 1;
+		// printf("1%s", number_from_args);
+	}
+	// printf("%s", number_from_args);
+	continue_string(number_from_args, va_args, g_varible);
+	if (value_is_null)
+		free(number_from_args);
+	va_end(*va_args);
+}
 #pragma endregion
 
 void	manage_fuction(const char *s, global_varible *g_varible, va_list *va_args)
@@ -655,7 +742,7 @@ void	manage_fuction(const char *s, global_varible *g_varible, va_list *va_args)
 		}
 		else if (s[start] == 's')
 		{
-
+			threatment_string(&s[start], va_args, g_varible);
 			break ;
 		}
 		else if (s[start] == 'c')
@@ -673,9 +760,14 @@ void	manage_fuction(const char *s, global_varible *g_varible, va_list *va_args)
 
 			break ;
 		}
+		else if (s[start] == 'p')
+		{
+
+			break;
+		}
 		start++;
 	}
-	(*g_varible).index_main_str = (*g_varible).index_main_str + start;
+	g_varible->index_main_str = g_varible->index_main_str + start;   // elsi slomaetsya delay po derevenski
 }
 
 int		free_struct(global_varible *g_varible, va_list *va_args)
@@ -763,6 +855,9 @@ int main()
 	#pragma endregion
 
 	#pragma region string
-	printf();
+	// printf("%012.10d", 12345678);
+	// printf("%5.2s\n", "Hello");
+	ft_printf("%010.6s\n", NULL);
+	printf("%010.6s", NULL);
 	#pragma endregion
 }
