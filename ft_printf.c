@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 09:22:52 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/04 22:47:06 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/05 20:32:18 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -429,7 +429,7 @@ void	substitution_value_accuracy_u(const char *s, global_varible *g_varible, va_
 
 void	threatment_unsigned(const char *s, va_list *va_args, global_varible *g_varible)
 {
-	long number_from_args;
+	unsigned int number_from_args;
 	// int accuracy;
 	// int width;
 	char *number_str;
@@ -629,6 +629,32 @@ void	threatment_integer(const char *s, va_list *va_args, global_varible *g_varib
 
 #pragma region string
 
+void	output_width_string(int length_number, int number_width, global_varible *g_varible)
+{
+	int start;
+	char symbol;
+	int boolean_zero;
+	int symbol_negative;
+
+	start = 0;
+	symbol = ' ';
+	symbol_negative = 0;
+	boolean_zero = zero_exist(g_varible->str);
+	symbol_negative = negative_exist(g_varible->str, 's');
+	if (length_number > number_width)
+		return ;
+	if (number_width < 0)
+		number_width = number_width * (-1);
+	if (length_number > number_width)
+		return ;
+	if (boolean_zero == 1 /*&& g_varible->exist_accuracy == 0*/
+		&& symbol_negative == 0)
+		symbol = '0';
+	while (length_number++ < number_width)
+		write(1, &symbol, 1);
+	g_varible->length = g_varible->length + length_number;
+}
+
 int	output_accuracy_string(int end, char *s, global_varible *g_varible, int boolean)
 {
 	int start;
@@ -644,49 +670,33 @@ int	output_accuracy_string(int end, char *s, global_varible *g_varible, int bool
 	}
 	else
 	{
-		// while (start < g_varible->accuracy)
-		// 	start++;
-		// printf("%d", g_varible->accuracy);
-		if (g_varible->accuracy <= length_string)
+		if (g_varible->accuracy <= length_string && g_varible->exist_accuracy)
+		{
+			// printf("1234");
 			length_string = g_varible->accuracy;
+		}
 	}
 	return (length_string);
 }
 
-void	continue_string(char *s, va_list *va_args, global_varible *g_varible)
+void	continue_string(char *s/*, va_list *va_args*/, global_varible *g_varible)
 {
 	int length_string;
-	int new_len_nbr;
+	// int new_len_nbr;
 	int start;
 	int new_width;
-	int varible_value;
+	// int varible_value;
 
 	// length_number = len_number(number);
 	length_string = ft_strlen(s);
 	start = 0;
 	length_string = output_accuracy_string(length_string, s, g_varible, 0);
-	// printf("%d", g_varible->accuracy);
-	// printf("%d", length_string);
-	// new_len_nbr = g_varible->accuracy - length_number;
-	// printf("%s", s);
-	// if (length_string >= g_varible->accuracy)
-	// {
-	// 	varible_value = length_string - g_varible->accuracy;
-	// 	if (varible_value < 0)
-	// 		varible_value = 0;
-	// 	if (g_varible->accuracy != 0)
-	// 		length_string = length_string - varible_value;
-	// }
-	// printf("length_string: %d", length_string);
 	new_width = new_width1(g_varible->width, length_string/*, number*/);
 	if (g_varible->width >= 0)
-		output_width_int(0, new_width, g_varible);
-	// while (start < g_varible->accuracy)
-	// 	write();
+		output_width_string(0, new_width, g_varible);
 	output_accuracy_string(length_string, s, g_varible, 1);
-	// while (start < ) // вывод строки по символам
 	if (g_varible->width < 0)
-		output_width_int(0, new_width, g_varible);
+		output_width_string(0, new_width, g_varible);
 }
 
 void	threatment_string(const char *s, va_list *va_args, global_varible *g_varible)
@@ -711,11 +721,147 @@ void	threatment_string(const char *s, va_list *va_args, global_varible *g_varibl
 		// printf("1%s", number_from_args);
 	}
 	// printf("%s", number_from_args);
-	continue_string(number_from_args, va_args, g_varible);
+	continue_string(number_from_args/*, va_args*/, g_varible);
 	if (value_is_null)
 		free(number_from_args);
 	va_end(*va_args);
 }
+#pragma endregion
+
+#pragma region char
+
+void	continue_char(char symbol, global_varible *g_varible)
+{
+	int length_string;
+	// int new_len_nbr;
+	int start;
+	int new_width;
+	// int varible_value;
+
+	// length_number = len_number(number);
+	length_string = 1;
+	start = 0;
+	// length_string = output_accuracy_string(length_string, &symbol, g_varible, 0);
+	new_width = new_width1(g_varible->width, length_string/*, number*/);
+	if (g_varible->width >= 0)
+		output_width_string(0, new_width, g_varible);
+	write(1, &symbol, 1);
+	g_varible->length++;
+	// output_accuracy_string(length_string, s, g_varible, 1);
+	if (g_varible->width < 0)
+		output_width_string(0, new_width, g_varible);
+}
+
+void	threatment_char(const char *s, va_list *va_args, global_varible *g_varible)
+{
+	char number_from_args;
+	int value_is_null;
+
+	value_is_null = 0;
+	g_varible->width = take_width(&s[0]); // ширина
+	// g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
+	// printf("accuracy: %d", g_varible->accuracy);
+	g_varible->str = &s[0]; // передал место с флагом (d)
+	substitution_value_width(&s[0], g_varible, va_args, 'c');
+	// substitution_value_accuracy(&s[0], g_varible, va_args);
+	number_from_args = va_arg(*va_args, int); // строка из аргумента
+	// printf("%c", number_from_args);
+	// if (number_from_args == NULL)
+	// {
+	// 	number_from_args = ft_strdup("(null)");
+	// 	value_is_null = 1;
+	// 	// printf("1%s", number_from_args);
+	// }
+	// printf("%s", number_from_args);
+	continue_char(number_from_args/*, va_args*/, g_varible);
+	// if (value_is_null)
+	// 	free(number_from_args);
+	va_end(*va_args);
+}
+#pragma endregion
+
+#pragma region hex(x)
+
+char	value_hex(int symbol)
+{
+	char return_char;
+	if (symbol >= 0 && symbol <= 9)
+		return_char = symbol + '0';
+	else if (symbol == 10)
+		return_char = 'a';
+	else if (symbol == 11)
+		return_char = 'b';
+	else if (symbol == 12)
+		return_char = 'c';
+	else if (symbol == 13)
+		return_char = 'd';
+	else if (symbol == 14)
+		return_char = 'e';
+	else if (symbol == 15)
+		return_char = 'f';
+	return (return_char);
+}
+
+void	hex_continue(char *ptr, int count_devision, int number, global_varible *g_varible)
+{
+	int start;
+	int new_len_nbr;
+	int new_width;
+
+	start = 0;
+	new_len_nbr = g_varible->accuracy - count_devision;
+	if (new_len_nbr < 0)
+		new_len_nbr = 0;
+	new_len_nbr = new_len_nbr + count_devision;
+	while (start < count_devision)
+	{
+		ptr[start] = value_hex(number % 16);
+		number = number / 16;
+		start++;
+	}
+	start = 0;
+	new_width = new_width1(g_varible->width, new_len_nbr/*, number*/);
+	if (g_varible->width >= 0)
+		output_width_int(0, new_width, g_varible);
+	output_accuracy_int(count_devision, new_len_nbr, number, g_varible->accuracy);
+	while (count_devision >= start)
+		write(1, &ptr[count_devision--], 1);
+	if (g_varible->width < 0)
+		output_width_int(0, new_width, g_varible);
+}
+
+int		count_devisions(int number)
+{
+	int quantity_devision;
+	int duplicate;
+
+	duplicate = number;
+	quantity_devision = 1;
+	while (duplicate > 15)
+	{
+		quantity_devision++;
+		duplicate = duplicate / 16;
+	}
+	return (quantity_devision);
+}
+
+void	threatment_hex(const char *s, va_list *va_args, global_varible *g_varible)
+{
+	int number;
+	char *ptr;
+	int count_devision;
+
+	g_varible->width = take_width(&s[0]);
+	g_varible->accuracy = take_accuracy(&s[0], g_varible);
+	substitution_value_width(&s[0], g_varible, va_args, 'x');
+	substitution_value_accuracy(&s[0], g_varible, va_args);
+	number = va_arg(*va_args, int);
+	count_devision = count_devisions(number);
+	ptr = malloc(count_devision * sizeof(char));
+	hex_continue(ptr, count_devision, number, g_varible);
+	free(ptr);
+}
+
 #pragma endregion
 
 void	manage_fuction(const char *s, global_varible *g_varible, va_list *va_args)
@@ -747,12 +893,12 @@ void	manage_fuction(const char *s, global_varible *g_varible, va_list *va_args)
 		}
 		else if (s[start] == 'c')
 		{
-
+			threatment_char(&s[start], va_args, g_varible);
 			break ;
 		}
 		else if (s[start] == 'x')
 		{
-
+			threatment_hex(&s[start], va_args, g_varible);
 			break ;
 		}
 		else if (s[start] == 'X')
@@ -763,11 +909,16 @@ void	manage_fuction(const char *s, global_varible *g_varible, va_list *va_args)
 		else if (s[start] == 'p')
 		{
 
-			break;
+			break ;
 		}
+		// else if (s[start] == '%')
+		// {
+
+		// 	break ;
+		// }
 		start++;
 	}
-	g_varible->index_main_str = g_varible->index_main_str + start;   // elsi slomaetsya delay po derevenski
+	(*g_varible).index_main_str = (*g_varible).index_main_str + start;   // elsi slomaetsya delay po derevenski
 }
 
 int		free_struct(global_varible *g_varible, va_list *va_args)
@@ -857,7 +1008,25 @@ int main()
 	#pragma region string
 	// printf("%012.10d", 12345678);
 	// printf("%5.2s\n", "Hello");
-	ft_printf("%010.6s\n", NULL);
-	printf("%010.6s", NULL);
+	// char *ptr = "Hello World";
+	// ft_printf("%0*.5s\n", 15, ptr);
+	// printf("%0*.5s", 15, ptr);
+	// ft_printf("%.00s", "\0");
+	// static char *s_hidden = "hi low\0don't print me lol\0";
+	// ft_printf("%0000s", s_hidden);
+	// printf("%0000s", s_hidden);
+	#pragma endregion
+
+	#pragma region char
+	// ft_printf("%010.5c\n", '1' + '5');
+	// printf("%010.5c", '1' + '5');
+	// ft_printf("%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c",(char)128,(char)129,(char)130,(char)131,(char)132,(char)133,(char)134,(char)135,(char)136,(char)137,(char)138,(char)139,(char)140,(char)141,(char)142,(char)143,(char)144,(char)145,(char)146,(char)147,(char)148,(char)149,(char)150,(char)151,(char)152,(char)153,(char)154,(char)155,(char)156,(char)157,(char)158,(char)159,(char)160,(char)161,(char)162,(char)163,(char)164,(char)165,(char)166,(char)167,(char)168,(char)169,(char)170,(char)171,(char)172,(char)173,(char)174,(char)175,(char)176,(char)177,(char)178,(char)179,(char)180,(char)181,(char)182,(char)183,(char)184,(char)185,(char)186,(char)187,(char)188,(char)189,(char)190,(char)191,(char)192,(char)193,(char)194,(char)195,(char)196,(char)197,(char)198,(char)199,(char)200,(char)201,(char)202,(char)203,(char)204,(char)205,(char)206,(char)207,(char)208,(char)209,(char)210,(char)211,(char)212,(char)213,(char)214,(char)215,(char)216,(char)217,(char)218,(char)219,(char)220,(char)221,(char)222,(char)223,(char)224,(char)225,(char)226,(char)227,(char)228,(char)229,(char)230,(char)231,(char)232,(char)233,(char)234,(char)235,(char)236,(char)237,(char)238,(char)239,(char)240,(char)241,(char)242,(char)243,(char)244,(char)245,(char)246,(char)247,(char)248,(char)249,(char)250,(char)251,(char)252,(char)253,(char)254,(char)255);
+	// printf("\n%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c%-1c%-2c%-3c%-4c",(char)128,(char)129,(char)130,(char)131,(char)132,(char)133,(char)134,(char)135,(char)136,(char)137,(char)138,(char)139,(char)140,(char)141,(char)142,(char)143,(char)144,(char)145,(char)146,(char)147,(char)148,(char)149,(char)150,(char)151,(char)152,(char)153,(char)154,(char)155,(char)156,(char)157,(char)158,(char)159,(char)160,(char)161,(char)162,(char)163,(char)164,(char)165,(char)166,(char)167,(char)168,(char)169,(char)170,(char)171,(char)172,(char)173,(char)174,(char)175,(char)176,(char)177,(char)178,(char)179,(char)180,(char)181,(char)182,(char)183,(char)184,(char)185,(char)186,(char)187,(char)188,(char)189,(char)190,(char)191,(char)192,(char)193,(char)194,(char)195,(char)196,(char)197,(char)198,(char)199,(char)200,(char)201,(char)202,(char)203,(char)204,(char)205,(char)206,(char)207,(char)208,(char)209,(char)210,(char)211,(char)212,(char)213,(char)214,(char)215,(char)216,(char)217,(char)218,(char)219,(char)220,(char)221,(char)222,(char)223,(char)224,(char)225,(char)226,(char)227,(char)228,(char)229,(char)230,(char)231,(char)232,(char)233,(char)234,(char)235,(char)236,(char)237,(char)238,(char)239,(char)240,(char)241,(char)242,(char)243,(char)244,(char)245,(char)246,(char)247,(char)248,(char)249,(char)250,(char)251,(char)252,(char)253,(char)254,(char)255);
+	#pragma endregion
+
+	// ft_printf("%.5.5d", 15);
+	#pragma region hex(x)
+	ft_printf("%x", 563);
+	// printf("%10.5x", 563);
 	#pragma endregion
 }
