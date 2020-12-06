@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 09:22:52 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/05 20:32:18 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/06 22:02:24 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,18 +336,10 @@ int		new_width_unsigned(int width, int length_number/*, int number*/)
 	if (width < 0)
 	{
 		width = width * (-1);
-		// if (number < 0)
-		// 	length_number = length_number + 1;
-		// printf("length_number: %d", length_number);
 		width = width - length_number;
 	}
 	else
-	{
-		// if (number < 0)
-		// 	length_number = length_number + 1;
 		width = width - length_number;
-	}
-	// printf("width: %d", width);
 	return (width);
 }
 
@@ -782,9 +774,38 @@ void	threatment_char(const char *s, va_list *va_args, global_varible *g_varible)
 
 #pragma region hex(x)
 
+void	output_width_hex(int length_number, int number_width, global_varible *g_varible)
+{
+	int start;
+	char symbol;
+	int boolean_zero;
+	int symbol_negative;
+
+	start = 0;
+	symbol = ' ';
+	symbol_negative = 0;
+	boolean_zero = zero_exist(g_varible->str);
+	symbol_negative = negative_exist(g_varible->str, 'x');
+	if (length_number > number_width)
+		return ;
+	if (number_width < 0)
+		number_width = number_width * (-1);
+	if (length_number > number_width)
+		return ;
+	if (boolean_zero == 1 && g_varible->exist_accuracy == 0
+		&& symbol_negative == 0)
+		symbol = '0';
+	while (length_number++ < number_width)
+	{
+		write(1, &symbol, 1);
+		g_varible->length++;
+	}
+}
+
 char	value_hex(int symbol)
 {
 	char return_char;
+	return_char = '0';
 	if (symbol >= 0 && symbol <= 9)
 		return_char = symbol + '0';
 	else if (symbol == 10)
@@ -801,8 +822,8 @@ char	value_hex(int symbol)
 		return_char = 'f';
 	return (return_char);
 }
-
-void	hex_continue(char *ptr, int count_devision, int number, global_varible *g_varible)
+// посчитать длину
+void	hex_continue(char *ptr, int count_devision, long number, global_varible *g_varible)
 {
 	int start;
 	int new_len_nbr;
@@ -813,30 +834,31 @@ void	hex_continue(char *ptr, int count_devision, int number, global_varible *g_v
 	if (new_len_nbr < 0)
 		new_len_nbr = 0;
 	new_len_nbr = new_len_nbr + count_devision;
-	while (start < count_devision)
+	while (start < count_devision && number > 0)
 	{
 		ptr[start] = value_hex(number % 16);
 		number = number / 16;
 		start++;
 	}
-	start = 0;
 	new_width = new_width1(g_varible->width, new_len_nbr/*, number*/);
 	if (g_varible->width >= 0)
-		output_width_int(0, new_width, g_varible);
+		output_width_hex(0, new_width, g_varible);
 	output_accuracy_int(count_devision, new_len_nbr, number, g_varible->accuracy);
-	while (count_devision >= start)
-		write(1, &ptr[count_devision--], 1);
+	g_varible->length = g_varible->length + count_devision;
+	while (count_devision > 0 && ptr[count_devision - 1])
+		write(1, &ptr[--count_devision], 1);
 	if (g_varible->width < 0)
-		output_width_int(0, new_width, g_varible);
+		output_width_hex(0, new_width, g_varible);
 }
 
-int		count_devisions(int number)
+int		count_devisions(long number)
 {
 	int quantity_devision;
-	int duplicate;
+	long duplicate;
 
 	duplicate = number;
 	quantity_devision = 1;
+	// printf("%d\n", quantity_devision);
 	while (duplicate > 15)
 	{
 		quantity_devision++;
@@ -847,19 +869,180 @@ int		count_devisions(int number)
 
 void	threatment_hex(const char *s, va_list *va_args, global_varible *g_varible)
 {
-	int number;
+	long number;
 	char *ptr;
 	int count_devision;
 
 	g_varible->width = take_width(&s[0]);
 	g_varible->accuracy = take_accuracy(&s[0], g_varible);
+	g_varible->str = &s[0];
+	count_devision = 1;
 	substitution_value_width(&s[0], g_varible, va_args, 'x');
 	substitution_value_accuracy(&s[0], g_varible, va_args);
-	number = va_arg(*va_args, int);
-	count_devision = count_devisions(number);
-	ptr = malloc(count_devision * sizeof(char));
+	number = va_arg(*va_args, unsigned int);
+	if (number == 0 && g_varible->accuracy == 0)
+	{
+		ptr = ft_strdup("");
+		if (g_varible->width >= 0)
+			g_varible->width = g_varible->width + 1;
+		else
+			g_varible->width = g_varible->width - 1;
+	}
+	else
+	{
+		count_devision = count_devisions(number);
+		ptr = malloc(count_devision * sizeof(char));
+	}
 	hex_continue(ptr, count_devision, number, g_varible);
 	free(ptr);
+}
+
+#pragma endregion
+
+#pragma region hex(X)
+void	output_width_hex_h(int length_number, int number_width, global_varible *g_varible)
+{
+	int start;
+	char symbol;
+	int boolean_zero;
+	int symbol_negative;
+
+	start = 0;
+	symbol = ' ';
+	symbol_negative = 0;
+	boolean_zero = zero_exist(g_varible->str);
+	symbol_negative = negative_exist(g_varible->str, 'X');
+	if (length_number > number_width)
+		return ;
+	if (number_width < 0)
+		number_width = number_width * (-1);
+	if (length_number > number_width)
+		return ;
+	if (boolean_zero == 1 && g_varible->exist_accuracy == 0
+		&& symbol_negative == 0)
+		symbol = '0';
+	while (length_number++ < number_width)
+	{
+		write(1, &symbol, 1);
+		g_varible->length++;
+	}
+}
+
+char	value_hex_h(int symbol)
+{
+	char return_char;
+	return_char = '0';
+	if (symbol >= 0 && symbol <= 9)
+		return_char = symbol + '0';
+	else if (symbol == 10)
+		return_char = 'A';
+	else if (symbol == 11)
+		return_char = 'B';
+	else if (symbol == 12)
+		return_char = 'C';
+	else if (symbol == 13)
+		return_char = 'D';
+	else if (symbol == 14)
+		return_char = 'E';
+	else if (symbol == 15)
+		return_char = 'F';
+	return (return_char);
+}
+// посчитать длину
+void	hex_continue_h(char *ptr, int count_devision, long number, global_varible *g_varible)
+{
+	int start;
+	int new_len_nbr;
+	int new_width;
+
+	start = 0;
+	new_len_nbr = g_varible->accuracy - count_devision;
+	if (new_len_nbr < 0)
+		new_len_nbr = 0;
+	new_len_nbr = new_len_nbr + count_devision;
+	while (start < count_devision && number > 0)
+	{
+		ptr[start] = value_hex_h(number % 16);
+		number = number / 16;
+		start++;
+	}
+	new_width = new_width1(g_varible->width, new_len_nbr/*, number*/);
+	if (g_varible->width >= 0)
+		output_width_hex_h(0, new_width, g_varible);
+	output_accuracy_int(count_devision, new_len_nbr, number, g_varible->accuracy);
+	g_varible->length = g_varible->length + count_devision;
+	while (count_devision > 0 && ptr[count_devision - 1])
+		write(1, &ptr[--count_devision], 1);
+	if (g_varible->width < 0)
+		output_width_hex_h(0, new_width, g_varible);
+}
+
+void	threatment_hex_h(const char *s, va_list *va_args, global_varible *g_varible)
+{
+	long number;
+	char *ptr;
+	int count_devision;
+
+	g_varible->width = take_width(&s[0]);
+	g_varible->accuracy = take_accuracy(&s[0], g_varible);
+	g_varible->str = &s[0];
+	substitution_value_width(&s[0], g_varible, va_args, 'X');
+	substitution_value_accuracy(&s[0], g_varible, va_args);
+	number = va_arg(*va_args, unsigned int);
+	if (number == 0 && g_varible->accuracy == 0)
+	{
+		ptr = ft_strdup("");
+		if (g_varible->width >= 0)
+			g_varible->width = g_varible->width + 1;
+		else
+			g_varible->width = g_varible->width - 1;
+	}
+	else
+	{
+		count_devision = count_devisions(number);
+		ptr = malloc(count_devision * sizeof(char));
+	}
+	hex_continue_h(ptr, count_devision, number, g_varible);
+	free(ptr);
+}
+#pragma endregion
+
+#pragma region pointer
+
+void	continue_thretment_p(global_varible *g_varible, long number_from_args, char *n_s)
+{
+
+}
+
+void	threatment_p(const char *s, va_list *va_args, global_varible *g_varible)
+{
+	// unsigned int p;
+
+	// p = (unsigned int)va_arg(*va_args, void *);
+	unsigned int number_from_args;
+	// int accuracy;
+	// int width;
+	char *number_str;
+
+	g_varible->width = take_width(&s[0]); // ширина
+	g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
+	g_varible->str = &s[0]; // передал место с флагом (d)
+	substitution_value_width_u(&s[0], g_varible, va_args, 'u');
+	substitution_value_accuracy_u(&s[0], g_varible, va_args);
+	number_from_args = (unsigned int)va_arg(*va_args, void *); // число из аргумента
+	if (number_from_args == 0 && g_varible->accuracy == 0)
+	{
+		number_str = ft_strdup("");
+		if (g_varible->width >= 0)
+			g_varible->width = g_varible->width + 1;
+		else
+			g_varible->width = g_varible->width - 1;
+	}
+	else
+		number_str = ft_itoa_u(number_from_args); // число в строке
+	continue_thretment_p(g_varible, number_from_args, number_str); // продолжение
+	free(number_str);
+	va_end(*va_args);
 }
 
 #pragma endregion
@@ -903,12 +1086,12 @@ void	manage_fuction(const char *s, global_varible *g_varible, va_list *va_args)
 		}
 		else if (s[start] == 'X')
 		{
-
+			threatment_hex_h(&s[start], va_args, g_varible);
 			break ;
 		}
 		else if (s[start] == 'p')
 		{
-
+			threatment_p(&s[start], va_args, g_varible);
 			break ;
 		}
 		// else if (s[start] == '%')
@@ -918,7 +1101,7 @@ void	manage_fuction(const char *s, global_varible *g_varible, va_list *va_args)
 		// }
 		start++;
 	}
-	(*g_varible).index_main_str = (*g_varible).index_main_str + start;   // elsi slomaetsya delay po derevenski
+	(*g_varible).index_main_str = (*g_varible).index_main_str + start;
 }
 
 int		free_struct(global_varible *g_varible, va_list *va_args)
@@ -1026,7 +1209,19 @@ int main()
 
 	// ft_printf("%.5.5d", 15);
 	#pragma region hex(x)
-	ft_printf("%x", 563);
-	// printf("%10.5x", 563);
+	// ft_printf("%8.3x\n", 8375);
+	// printf("%8.3x", 8375);
+	// ft_printf("%-10.5x", 12345678);
+	// printf("%-10.5x", 12345678);
+	// ft_printf("%-5.0x", 0);
+	// printf("%-5.0x", 0);
 	#pragma endregion
+
+	#pragma region pointer
+	char *p;
+	printf("%p\n", NULL);
+	// ft_printf("%p", p);
+	#pragma endregion
+
+
 }
