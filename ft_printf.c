@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 09:22:52 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/06 22:02:24 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/07 19:16:12 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct	struct_global_varible
 	int			accuracy;
 	int			exist_accuracy;
 	int			width;
+	int			zero_exist;
 }				global_varible;
 
 int	len_number(long nbr)
@@ -1009,40 +1010,282 @@ void	threatment_hex_h(const char *s, va_list *va_args, global_varible *g_varible
 
 #pragma region pointer
 
-void	continue_thretment_p(global_varible *g_varible, long number_from_args, char *n_s)
+void	output_width_p(int length_number, int number_width, global_varible *g_varible)
 {
+	char symbol;
+	int boolean_zero;
+	int symbol_negative;
 
+	symbol = ' ';
+	symbol_negative = 0;
+	boolean_zero = zero_exist(g_varible->str);
+	symbol_negative = negative_exist(g_varible->str, 'p');
+	if (length_number > number_width)
+		return ;
+	if (number_width < 0)
+		number_width = number_width * (-1);
+	if (length_number > number_width)
+		return ;
+	if (boolean_zero == 1 && g_varible->exist_accuracy == 0
+		&& symbol_negative == 0)
+			symbol = '0';
+	while (length_number++ < number_width)
+	{
+		write(1, &symbol, 1);
+		g_varible->length++;
+	}
+}
+
+void	output_p(char *ptr, int count_devision)
+{
+	// printf("count_devision: %d\n", count_devision);
+	while (count_devision > 0 && ptr[count_devision - 1])
+		write(1, &ptr[--count_devision], 1);
+}
+
+void	continue_thretment_p(char *ptr, int count_devision, long number, global_varible *g_varible)
+{
+	int start;
+	int new_len_nbr;
+	int new_width;
+
+	start = 0;
+	new_len_nbr = g_varible->accuracy - count_devision;
+	if (new_len_nbr < 0)
+		new_len_nbr = 0;
+	new_len_nbr = new_len_nbr + count_devision;
+	while (start < count_devision && number >= 0)
+	{
+		ptr[start] = value_hex(number % 16);
+		number = number / 16;
+		start++;
+	}
+	// НЕ РАБОТАЕТ С НУЛЕМ ПОДУМАТЬ НАД ЭТИМ
+	new_width = new_width1(g_varible->width, new_len_nbr/*, number*/) - 2;
+	if ((g_varible->width >= 0 && zero_exist(g_varible->str) == 0) || g_varible->exist_accuracy != 0)
+		output_width_p(0, new_width, g_varible);
+	write(1, "0", 1);
+	write(1, "x", 1);
+	if (g_varible->width >= 0 && zero_exist(g_varible->str) == 1 && g_varible->exist_accuracy == 0)
+		output_width_p(0, new_width, g_varible);
+	output_accuracy_int(count_devision, new_len_nbr, number, g_varible->accuracy);
+	g_varible->length = g_varible->length + count_devision;
+	output_p(ptr, count_devision);
+	if (g_varible->width < 0)
+		output_width_p(0, new_width, g_varible);
 }
 
 void	threatment_p(const char *s, va_list *va_args, global_varible *g_varible)
 {
-	// unsigned int p;
+	long long number;
+	char *ptr;
+	int count_devision;
 
-	// p = (unsigned int)va_arg(*va_args, void *);
-	unsigned int number_from_args;
-	// int accuracy;
-	// int width;
-	char *number_str;
-
-	g_varible->width = take_width(&s[0]); // ширина
-	g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
-	g_varible->str = &s[0]; // передал место с флагом (d)
-	substitution_value_width_u(&s[0], g_varible, va_args, 'u');
-	substitution_value_accuracy_u(&s[0], g_varible, va_args);
-	number_from_args = (unsigned int)va_arg(*va_args, void *); // число из аргумента
-	if (number_from_args == 0 && g_varible->accuracy == 0)
+	g_varible->width = take_width(&s[0]);
+	g_varible->accuracy = take_accuracy(&s[0], g_varible);
+	g_varible->str = &s[0];
+	count_devision = 1;
+	substitution_value_width(&s[0], g_varible, va_args, 'p');
+	substitution_value_accuracy(&s[0], g_varible, va_args);
+	// printf("accuracy: %d", g_varible->accuracy);
+	number = (unsigned long)va_arg(*va_args, void *);
+	if (number == 0 && g_varible->exist_accuracy != 0)
 	{
-		number_str = ft_strdup("");
+		ptr = ft_strdup("");
 		if (g_varible->width >= 0)
-			g_varible->width = g_varible->width + 1;
+			g_varible->width = g_varible->width;
 		else
-			g_varible->width = g_varible->width - 1;
+			g_varible->width = g_varible->width;
+		count_devision = 0;
 	}
 	else
-		number_str = ft_itoa_u(number_from_args); // число в строке
-	continue_thretment_p(g_varible, number_from_args, number_str); // продолжение
-	free(number_str);
+	{
+		count_devision = count_devisions(number);
+		ptr = malloc(count_devision * sizeof(char));
+	}
+	continue_thretment_p(ptr, count_devision, number, g_varible);
+	free(ptr);
+}
+
+#pragma endregion
+
+#pragma region %
+
+int		negative_exist_procent(const char *str, char symbol)
+{
+	int start;
+	int symbol_negative;
+
+	start = 0;
+	symbol_negative = 0;
+	while (str[start - 1] != '%')
+		start--;
+	while (str[start] != '-' && str[start] != '.' && str[start] != symbol)
+		start++;
+	if (str[start] == '-')
+		return (1);
+	return (0);
+}
+
+int		take_width_procent(const char *s)
+{
+	int start;
+	int number;
+	int value_zero;
+
+	start = 0;
+	number = 0;
+	value_zero = 0;
+	while (s[start - 1] != '%' && s[start - 1])
+		start--;
+	while (s[start] == '0')
+	{
+		value_zero = 1;
+		start++;
+	}
+	number = ft_atoi(&s[start]);
+	return (number);
+}
+
+int		zero_exist_procent(const char *str)
+{
+	int start;
+
+	start = 0;
+	while (str[start - 1] != '%')
+		start--;
+	if (str[start] == '0')
+		return (1);
+	return (0);
+}
+
+void	output_width_procent(int length_number, int number_width, global_varible *g_varible)
+{
+	int start;
+	char symbol;
+	int boolean_zero;
+	int symbol_negative;
+
+	start = 0;
+	symbol = ' ';
+	symbol_negative = 0;
+	boolean_zero = zero_exist_procent(g_varible->str);
+	// printf("boolean_zero: %d", boolean_zero);
+	symbol_negative = negative_exist_procent(g_varible->str, '%');
+	if (length_number > number_width)
+		return ;
+	// printf("g_varible->width: %d", number_width);
+	if (number_width < 0)
+		number_width = number_width * (-1);
+	if (length_number > number_width)
+		return ;
+	if (boolean_zero == 1 /*&& g_varible->exist_accuracy == 0*/
+		&& symbol_negative == 0)
+		symbol = '0';
+	while (length_number++ < number_width)
+		write(1, &symbol, 1);
+	g_varible->length = g_varible->length + length_number;
+}
+
+void	continue_procent(const char *s, va_list *va_args, global_varible *g_varible)
+{
+	int len_str;
+
+	len_str = g_varible->width - 1;
+	// printf("g_varible->width: %d", len_str);
+	if (g_varible->width >= 0)
+	{
+		output_width_procent(0, len_str, g_varible);
+	}
+	write(1, "%", 1);
+	if (g_varible->width < 0)
+	{
+		// printf("HGHJFKL");
+		// printf("len_str: %d\n", len_str);
+		if (len_str < 0)
+	 		len_str = len_str * (-1);
+		output_width_procent(0, len_str, g_varible);
+	}
+}
+
+void	substitution_value_width_proc(const char *s, global_varible *g_varible, va_list *va_args, char symbol)
+{
+	int start;
+	int number_negative;
+
+	start = 0;
+	number_negative = 0;
+	while (s[start - 1] != '%')
+	{
+		// printf("char = %c\n", s[start]);
+		start--;
+	}
+	// printf("char = %c\n", s[start]);
+	while (s[start] != '-' && s[start] != '*'
+		&& s[start] != symbol && s[start] != '.')
+		start++;
+	// printf("char = %c\n", s[start]);
+	if (s[start] == '-')
+	{
+		number_negative = 1;
+		start++;
+	}
+	// printf("char = %c\n", s[start]);
+	while (s[start] != '*' && s[start] != symbol && s[start] != '.')
+	{
+		// printf("char = %c\n", s[start]);
+		start++;
+	}
+	// printf("char = %c\n", s[start]);
+		// printf("hgjfkl");
+	// printf("char = %c\n", s[start]);
+	if (s[start] == '*')
+	{
+		// printf("hgjfkl");
+		g_varible->width = va_arg(*va_args, int);
+		if (number_negative == 1 && g_varible->width > 0)
+			g_varible->width = g_varible->width * (-1);
+	}
 	va_end(*va_args);
+}
+
+void	threatment_procent(const char *s, va_list *va_args, global_varible *g_varible)
+{
+	// write(1, "%", 1);
+	// long long number;
+	// char *ptr;
+	// int count_devision
+	int start;
+
+	start = 0;
+	// printf("char = %c\n", s[start]);
+	g_varible->width = take_width_procent(&s[start - 1]);
+	// printf("g_varible->width: %d", g_varible->width);
+	// g_varible->accuracy = take_accuracy(&s[0], g_varible);
+	g_varible->str = &s[0];
+	// count_devision = 1;
+	substitution_value_width_proc(&s[0], g_varible, va_args, '%');
+	// printf("width: %d", g_varible->width);
+	continue_procent(s, va_args, g_varible);
+	// substitution_value_accuracy(&s[0], g_varible, va_args);
+	// printf("accuracy: %d", g_varible->accuracy);
+	// number = (unsigned long)va_arg(*va_args, void *);
+	// if (number == 0 && g_varible->exist_accuracy != 0)
+	// {
+	// 	ptr = ft_strdup("");
+	// 	if (g_varible->width >= 0)
+	// 		g_varible->width = g_varible->width;
+	// 	else
+	// 		g_varible->width = g_varible->width;
+	// 	count_devision = 0;
+	// }
+	// else
+	// {
+		// count_devision = count_devisions(number);
+		// ptr = malloc(count_devision * sizeof(char));
+	// }
+	// continue_thretment_p(ptr, count_devision, number, g_varible);
+	// free(ptr);
 }
 
 #pragma endregion
@@ -1094,11 +1337,12 @@ void	manage_fuction(const char *s, global_varible *g_varible, va_list *va_args)
 			threatment_p(&s[start], va_args, g_varible);
 			break ;
 		}
-		// else if (s[start] == '%')
-		// {
-
-		// 	break ;
-		// }
+		else if (s[start + 1] == '%')
+		{
+			start++;
+			threatment_procent(&s[start], va_args, g_varible);
+			break ;
+		}
 		start++;
 	}
 	(*g_varible).index_main_str = (*g_varible).index_main_str + start;
@@ -1218,10 +1462,13 @@ int main()
 	#pragma endregion
 
 	#pragma region pointer
-	char *p;
-	printf("%p\n", NULL);
-	// ft_printf("%p", p);
+	// char *p;
+	// printf("%-10.5%\n", 5);
+	// ft_printf("%10%\n");
 	#pragma endregion
 
-
+	#pragma region procent
+	// printf("%010%\n", 10);
+	ft_printf("%0*%\n", 10);
+	#pragma endregion
 }
