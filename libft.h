@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 19:35:41 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 17:29:15 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/09 19:47:01 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,23 @@ void				zeroing_value(global_varible *g_varible);
 void				threatment_unsigned(const char *s,
 		va_list *va_args, global_varible *g_varible);
 void				threatment_integer(const char *s,
+		va_list *va_args, global_varible *g_varible);
+void				threatment_int(const char *s,
+		va_list *va_args, global_varible *g_varible);
+void				threatment_string(const char *s,
+		va_list *va_args, global_varible *g_varible);
+void				threatment_char(const char *s,
+		va_list *va_args, global_varible *g_varible);
+void				threatment_hex(const char *s,
+		va_list *va_args, global_varible *g_varible);
+int					count_devisions(long number);
+char				value_hex(int symbol);
+void				threatment_hex_h(const char *s,
+		va_list *va_args, global_varible *g_varible);
+void				threatment_p(const char *s,
+		va_list *va_args, global_varible *g_varible);
+int					take_width_procent(const char *s);
+int					negative_exist_procent(const char *str, char symbol);
+void				threatment_procent(const char *s,
 		va_list *va_args, global_varible *g_varible);
 #endif
