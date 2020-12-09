@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 09:22:52 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/07 19:16:12 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/09 17:29:55 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,439 +16,448 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-typedef struct	struct_global_varible
-{
-	int			index_main_str;
-	const char	*str;
-	int			length;
-	int			accuracy;
-	int			exist_accuracy;
-	int			width;
-	int			zero_exist;
-}				global_varible;
+void	threatment_int(const char *s, va_list *va_args, global_varible *g_varible);
 
-int	len_number(long nbr)
-{
-	int len_nbr;
-	int start;
+// typedef struct	struct_global_varible
+// {
+// 	int			index_main_str;
+// 	const char	*str;
+// 	int			length;
+// 	int			accuracy;
+// 	int			exist_accuracy;
+// 	int			width;
+// 	int			zero_exist;
+// 	int			start;
+// }				global_varible;
 
-	len_nbr = 0;
-	start = 0;
-	if (nbr == 0)
-		return (1);
-	if (nbr < 0)
-		nbr = nbr * (-1);
-	while (nbr != 0)
-	{
-		nbr = nbr / 10;
-		len_nbr++;
-	}
-	return (len_nbr);
-}
+// int	len_number(long nbr)
+// {
+// 	int len_nbr;
+// 	int start;
 
-// передать указатель строки с начала флага(s, c, d, и так далее)
-int		take_width(const char *s/*, global_varible *g_varibleva_list *va_args*/)
-{
-	int start;
-	int number;
-	int value_zero;
+// 	len_nbr = 0;
+// 	start = 0;
+// 	if (nbr == 0)
+// 		return (1);
+// 	if (nbr < 0)
+// 		nbr = nbr * (-1);
+// 	while (nbr != 0)
+// 	{
+// 		nbr = nbr / 10;
+// 		len_nbr++;
+// 	}
+// 	return (len_nbr);
+// }
 
-	start = 0;
-	number = 0;
-	value_zero = 0;
-	while (s[start] != '%' && s[start])
-		start--;
-	while (s[start + 1] == '0')
-	{
-		value_zero = 1;
-		start++;
-	}
-	number = ft_atoi(&s[start + 1]);
-	// if (value_zero = 1 && va_args->accuracy == 0)
-	// printf("\nnumber: %d\n", number);
-	return (number);
-}
+// // передать указатель строки с начала флага(s, c, d, и так далее)
+// int		take_width(const char *s/*, global_varible *g_varibleva_list *va_args*/)
+// {
+// 	int start;
+// 	int number;
+// 	int value_zero;
 
-// передать указатель строки с начала флага(s, c, d, и так далее)
-int		take_accuracy(const char *s, global_varible *g_varible/*, va_list *va_args, */)
-{
-	int start;
-	int number_accuracy;
+// 	start = 0;
+// 	number = 0;
+// 	value_zero = 0;
+// 	while (s[start] != '%' && s[start])
+// 		start--;
+// 	while (s[start + 1] == '0')
+// 	{
+// 		value_zero = 1;
+// 		start++;
+// 	}
+// 	number = ft_atoi(&s[start + 1]);
+// 	// if (value_zero = 1 && va_args->accuracy == 0)
+// 	// printf("\nnumber: %d\n", number);
+// 	return (number);
+// }
 
-	start = 0;
-	number_accuracy = 0;
-	while (s[start] != '.' && s[start] != '%' && s[start])
-		start--;
-	if (s[start] != '.')
-	{
-		g_varible->exist_accuracy = 0;
-		return (0);
-	}
-	number_accuracy = ft_atoi(&s[start + 1]);
-	if (number_accuracy < 0)
-		return (0);
-	//printf("%d", number_accuracy);
-	return (number_accuracy);
-}
-// передать значение начинающееся с флага (d,c,s итд)
-int		zero_exist(const char *str)
-{
-	int start;
+// // передать указатель строки с начала флага(s, c, d, и так далее)
+// int		take_accuracy(const char *s, global_varible *g_varible/*, va_list *va_args, */)
+// {
+// 	int start;
+// 	int number_accuracy;
 
-	start = 0;
-	while (str[start] != '%')
-		start--;
-	if (str[start + 1] == '0')
-		return (1);
-	return (0);
-}
+// 	start = 0;
+// 	number_accuracy = 0;
+// 	while (s[start] != '.' && s[start] != '%' && s[start])
+// 		start--;
+// 	if (s[start] != '.')
+// 	{
+// 		// printf("exist_accuracy: %d", g_varible->exist_accuracy);
+// 		g_varible->exist_accuracy = 0;
+// 		return (0);
+// 	}
+// 	number_accuracy = ft_atoi(&s[start + 1]);
+// 	if (number_accuracy < 0)
+// 		return (0);
+// 	//printf("%d", number_accuracy);
+// 	return (number_accuracy);
+// }
+// // передать значение начинающееся с флага (d,c,s итд)
+// int		zero_exist(const char *str)
+// {
+// 	int start;
 
-int		negative_exist(const char *str, char symbol)
-{
-	int start;
-	int symbol_negative;
+// 	start = 0;
+// 	while (str[start] != '%')
+// 		start--;
+// 	if (str[start + 1] == '0')
+// 		return (1);
+// 	return (0);
+// }
 
-	start = 0;
-	symbol_negative = 0;
-	while (str[start] != '%')
-		start--;
-	while (str[start] != '-' && str[start] != '.' && str[start] != symbol)
-		start++;
-	if (str[start] == '-')
-		return (1);
-	return (0);
-}
+// int		negative_exist(const char *str, char symbol)
+// {
+// 	int start;
+// 	int symbol_negative;
+
+// 	start = 0;
+// 	symbol_negative = 0;
+// 	while (str[start] != '%')
+// 		start--;
+// 	while (str[start] != '-' && str[start] != '.' && str[start] != symbol)
+// 		start++;
+// 	if (str[start] == '-')
+// 		return (1);
+// 	return (0);
+// }
+
+// зануление значений в структуре
+// void	zeroing_value(global_varible *g_varible)
+// {
+// 	g_varible->accuracy = 0;
+// 	g_varible->exist_accuracy = 1;
+// 	g_varible->width = 0;
+// 	g_varible->zero_exist = 0;
+// }
 
 #pragma region threatment_d
 // принимает длину числа в символах, и число ширины
-void	output_width_int(int length_number, int number_width, global_varible *g_varible)
-{
-	int start;
-	char symbol;
-	int boolean_zero;
-	int symbol_negative;
+// void	output_width_int(int length_number, int number_width, global_varible *g_varible)
+// {
+// 	int start;
+// 	char symbol;
+// 	int boolean_zero;
+// 	int symbol_negative;
 
-	start = 0;
-	symbol = ' ';
-	symbol_negative = 0;
-	boolean_zero = zero_exist(g_varible->str);
-	symbol_negative = negative_exist(g_varible->str, 'd');
-	if (length_number > number_width)
-		return ;
-	if (number_width < 0)
-		number_width = number_width * (-1);
-	if (length_number > number_width)
-		return ;
-	if (boolean_zero == 1 && g_varible->exist_accuracy == 0
-		&& symbol_negative == 0)
-		symbol = '0';
-	while (length_number++ < number_width)
-		write(1, &symbol, 1);
-}
+// 	start = 0;
+// 	symbol = ' ';
+// 	symbol_negative = 0;
+// 	boolean_zero = zero_exist(g_varible->str);
+// 	symbol_negative = negative_exist(g_varible->str, 'd');
+// 	if (length_number > number_width)
+// 		return ;
+// 	if (number_width < 0)
+// 		number_width = number_width * (-1);
+// 	if (length_number > number_width)
+// 		return ;
+// 	if (boolean_zero == 1 && g_varible->exist_accuracy == 0
+// 		&& symbol_negative == 0)
+// 		symbol = '0';
+// 	while (length_number++ < number_width)
+// 		write(1, &symbol, 1);
+// }
 
-// длина числа в символах, и число точности, и само число
-void	output_accuracy_int(int length_number, int number_accuracy, long number, int accuracy)
-{
-	if (accuracy == 0)
-		number_accuracy = 0;
-	if (number_accuracy < 0)
-		number_accuracy = 0;
-	if (number < 0)
-	{
-		write(1, "-", 1);
-		number = number * (-1);
-		number_accuracy = number_accuracy - 1;
-	}
-	while (length_number++ < number_accuracy)
-		write(1, "0", 1);
-}
+// // длина числа в символах, и число точности, и само число
+// void	output_accuracy_int(int length_number, int number_accuracy, long number, int accuracy)
+// {
+// 	if (accuracy == 0)
+// 		number_accuracy = 0;
+// 	if (number_accuracy < 0)
+// 		number_accuracy = 0;
+// 	if (number < 0)
+// 	{
+// 		write(1, "-", 1);
+// 		number = number * (-1);
+// 		number_accuracy = number_accuracy - 1;
+// 	}
+// 	while (length_number++ < number_accuracy)
+// 		write(1, "0", 1);
+// }
 
-int		new_width1(int width, int length_number/*, int number*/)
-{
-	if (width < 0)
-	{
-		width = width * (-1);
-		// if (number < 0)
-		// 	length_number = length_number + 1;
-		// printf("length_number: %d", length_number);
-		width = width - length_number;
-	}
-	else
-	{
-		// if (number < 0)
-		// 	length_number = length_number + 1;
-		width = width - length_number;
-	}
-	// printf("width: %d", width);
-	return (width);
-}
+// int		new_width1(int width, int length_number/*, int number*/)
+// {
+// 	if (width < 0)
+// 	{
+// 		width = width * (-1);
+// 		width = width - length_number;
+// 	}
+// 	else
+// 		width = width - length_number;
+// 	return (width);
+// }
 
-void	continue_thretment_int(global_varible *g_varible, int number, char *number_str)
-{
-	int length_number;
-	int new_len_nbr;
-	int start_number;
-	int new_width;
+// void	continue_thretment_int(global_varible *g_varible, int number, char *number_str)
+// {
+// 	int length_number;
+// 	int new_len_nbr;
+// 	int start_number;
+// 	int new_width;
 
-	length_number = len_number(number);
-	new_len_nbr = g_varible->accuracy - length_number; // 5 - 2 = 3
-	if (new_len_nbr < 0)
-		new_len_nbr = 0;
-	new_len_nbr = new_len_nbr + length_number; // 3 + 2 = 5
-	start_number = 0;
-	if (number < 0) // если число отрицательное
-	{
-		new_len_nbr = new_len_nbr + 1;
-		start_number = 1;
-	}
-	new_width = new_width1(g_varible->width, new_len_nbr/*, number*/);
-	if (g_varible->width >= 0)
-		output_width_int(0, new_width, g_varible);
-	output_accuracy_int(length_number, new_len_nbr, number, g_varible->accuracy);
-	while (number_str[start_number]) // вывод числа по символам
-		write(1, &number_str[start_number++], 1);
-	if (g_varible->width < 0)
-		output_width_int(0, new_width, g_varible);
-}
-// строка начинается с флага
-void	substitution_value_width(const char *s, global_varible *g_varible, va_list *va_args, char symbol)
-{
-	int start;
-	int number_negative;
+// 	length_number = len_number(number);
+// 	printf("%d", length_number);
+// 	new_len_nbr = g_varible->accuracy - length_number; // 5 - 2 = 3
+// 	if (new_len_nbr < 0)
+// 		new_len_nbr = 0;
+// 	new_len_nbr = new_len_nbr + length_number; // 3 + 2 = 5
+// 	start_number = 0;
+// 	if (number < 0) // если число отрицательное
+// 	{
+// 		new_len_nbr = new_len_nbr + 1;
+// 		start_number = 1;
+// 	}
+// 	new_width = new_width1(g_varible->width, new_len_nbr/*, number*/);
+// 	if (g_varible->width >= 0)
+// 		output_width_int(0, new_width, g_varible);
+// 	output_accuracy_int(length_number, new_len_nbr, number, g_varible->accuracy);
+// 	while (number_str[start_number]) // вывод числа по символам
+// 		write(1, &number_str[start_number++], 1);
+// 	if (g_varible->width < 0)
+// 		output_width_int(0, new_width, g_varible);
+// }
+// // строка начинается с флага
+// void	substitution_value_width(const char *s, global_varible *g_varible, va_list *va_args, char symbol)
+// {
+// 	int start;
+// 	int number_negative;
 
-	start = 0;
-	number_negative = 0;
-	while (s[start] != '%')
-		start--;
-	while (s[start] != '-' && s[start] != '*'
-		&& s[start] != symbol && s[start] != '.')
-		start++;
-	if (s[start] == '-')
-	{
-		number_negative = 1;
-		start++;
-	}
-	while (s[start] != '*' && s[start] != symbol && s[start] != '.')
-		start++;
-	if (s[start] == '*')
-	{
-		g_varible->width = va_arg(*va_args, int);
-		if (number_negative == 1 && g_varible->width > 0)
-			g_varible->width = g_varible->width * (-1);
-	}
-	va_end(*va_args);
-}
-// строка начинается с флага
-void	substitution_value_accuracy(const char *s, global_varible *g_varible, va_list *va_args)
-{
-	int start;
+// 	start = 0;
+// 	number_negative = 0;
+// 	while (s[start] != '%')
+// 		start--;
+// 	while (s[start] != '-' && s[start] != '*'
+// 		&& s[start] != symbol && s[start] != '.')
+// 		start++;
+// 	if (s[start] == '-')
+// 	{
+// 		number_negative = 1;
+// 		start++;
+// 	}
+// 	while (s[start] != '*' && s[start] != symbol && s[start] != '.')
+// 		start++;
+// 	if (s[start] == '*')
+// 	{
+// 		g_varible->width = va_arg(*va_args, int);
+// 		if (number_negative == 1 && g_varible->width > 0)
+// 			g_varible->width = g_varible->width * (-1);
+// 	}
+// 	va_end(*va_args);
+// }
+// // строка начинается с флага
+// void	substitution_value_accuracy(const char *s, global_varible *g_varible, va_list *va_args)
+// {
+// 	int start;
 
-	start = 0;
-	while (s[start] != '.' && s[start] != '%')
-		start--;
-	if (s[start] != '.')
-		return ;
-	else
-	{
-		if (s[start + 1] == '*')
-		{
-			g_varible->accuracy = va_arg(*va_args, int);
-			// printf("accuracy: %d\n", g_varible->accuracy);
-		}
-	}
-	va_end(*va_args);
-}
+// 	start = 0;
+// 	while (s[start] != '.' && s[start] != '%')
+// 		start--;
+// 	if (s[start] != '.')
+// 		return ;
+// 	else
+// 	{
+// 		if (s[start + 1] == '*')
+// 		{
+// 			g_varible->accuracy = va_arg(*va_args, int);
+// 			// printf("accuracy: %d\n", g_varible->accuracy);
+// 		}
+// 	}
+// 	va_end(*va_args);
+// }
 
-void	threatment_int(const char *s, va_list *va_args, global_varible *g_varible)
-{
-	int number_from_args;
-	// int accuracy;
-	// int width;
-	char *number_str;
+// void	threatment_int(const char *s, va_list *va_args, global_varible *g_varible)
+// {
+// 	int number_from_args;
+// 	// int accuracy;
+// 	// int width;
+// 	char *number_str;
 
-	g_varible->width = take_width(&s[0]); // ширина
-	g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
-	g_varible->str = &s[0]; // передал место с флагом (d)
-	substitution_value_width(&s[0], g_varible, va_args, 'd');
-	substitution_value_accuracy(&s[0], g_varible, va_args);
-	number_from_args = va_arg(*va_args, int); // число из аргумента
-	// printf("number_from_args: %d\n", number_from_args);
-	if (number_from_args == 0 && g_varible->accuracy == 0)
-	{
-		number_str = ft_strdup("");
-		if (g_varible->width >= 0)
-			g_varible->width = g_varible->width + 1;
-		else
-			g_varible->width = g_varible->width - 1;
-	}
-	else
-		number_str = ft_itoa(number_from_args); // число в строке
-	continue_thretment_int(g_varible, number_from_args, number_str); // продолжение
-	free(number_str);
-	va_end(*va_args);
-}
+// 	g_varible->width = take_width(&s[0]); // ширина
+// 	g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
+// 	g_varible->str = &s[0]; // передал место с флагом (d)
+// 	substitution_value_width(&s[0], g_varible, va_args, 'd');
+// 	substitution_value_accuracy(&s[0], g_varible, va_args);
+// 	number_from_args = va_arg(*va_args, int); // число из аргумента
+// 	// printf("number_from_args: %d\n", number_from_args);
+// 	if (number_from_args == 0 && g_varible->accuracy == 0)
+// 	{
+// 		number_str = ft_strdup("");
+// 		if (g_varible->width >= 0)
+// 			g_varible->width = g_varible->width + 1;
+// 		else
+// 			g_varible->width = g_varible->width - 1;
+// 	}
+// 	else
+// 		number_str = ft_itoa(number_from_args); // число в строке
+// 	continue_thretment_int(g_varible, number_from_args, number_str); // продолжение
+// 	free(number_str);
+// 	zeroing_value(g_varible);
+// 	va_end(*va_args);
+// }
 #pragma endregion
 
 #pragma region threatment_unsigned
-void	output_width_unsigned(int length_number, int number_width, global_varible *g_varible)
-{
-	int start;
-	char symbol;
-	int boolean_zero;
-	int symbol_negative;
+// void	output_width_unsigned(int length_number, int number_width, global_varible *g_varible)
+// {
+// 	int start;
+// 	char symbol;
+// 	int boolean_zero;
+// 	int symbol_negative;
 
-	start = 0;
-	symbol = ' ';
-	symbol_negative = 0;
-	boolean_zero = zero_exist(g_varible->str);
-	symbol_negative = negative_exist(g_varible->str, 'u');
-	if (length_number > number_width)
-		return ;
-	if (number_width < 0)
-		number_width = number_width * (-1);
-	if (length_number > number_width)
-		return ;
-	if (boolean_zero == 1 && g_varible->exist_accuracy == 0
-		&& symbol_negative == 0)
-		symbol = '0';
-	while (length_number++ < number_width)
-		write(1, &symbol, 1);
-}
+// 	start = 0;
+// 	symbol = ' ';
+// 	symbol_negative = 0;
+// 	boolean_zero = zero_exist(g_varible->str);
+// 	symbol_negative = negative_exist(g_varible->str, 'u');
+// 	if (length_number > number_width)
+// 		return ;
+// 	if (number_width < 0)
+// 		number_width = number_width * (-1);
+// 	if (length_number > number_width)
+// 		return ;
+// 	if (boolean_zero == 1 && g_varible->exist_accuracy == 0
+// 		&& symbol_negative == 0)
+// 		symbol = '0';
+// 	while (length_number++ < number_width)
+// 		write(1, &symbol, 1);
+// }
 
 // длина числа в символах, и число точности, и само число
-void	output_accuracy_unsigned(int length_number, int number_accuracy, long number, int accuracy)
-{
-	if (accuracy == 0)
-		number_accuracy = 0;
-	if (number_accuracy < 0)
-		number_accuracy = 0;
-	if (number < 0)
-	{
-		write(1, "-", 1);
-		number = number * (-1);
-		number_accuracy = number_accuracy - 1;
-	}
-	while (length_number++ < number_accuracy)
-		write(1, "0", 1);
-}
+// void	output_accuracy_unsigned(int length_number, int number_accuracy, long number, int accuracy)
+// {
+// 	if (accuracy == 0)
+// 		number_accuracy = 0;
+// 	if (number_accuracy < 0)
+// 		number_accuracy = 0;
+// 	if (number < 0)
+// 	{
+// 		write(1, "-", 1);
+// 		number = number * (-1);
+// 		number_accuracy = number_accuracy - 1;
+// 	}
+// 	while (length_number++ < number_accuracy)
+// 		write(1, "0", 1);
+// }
 
-int		new_width_unsigned(int width, int length_number/*, int number*/)
-{
-	if (width < 0)
-	{
-		width = width * (-1);
-		width = width - length_number;
-	}
-	else
-		width = width - length_number;
-	return (width);
-}
+// int		new_width_unsigned(int width, int length_number/*, int number*/)
+// {
+// 	if (width < 0)
+// 	{
+// 		width = width * (-1);
+// 		width = width - length_number;
+// 	}
+// 	else
+// 		width = width - length_number;
+// 	return (width);
+// }
 
-void	continue_thretment_unsigned(global_varible *g_varible, long number, char *number_str)
-{
-	int length_number;
-	int new_len_nbr;
-	int start_number;
-	int new_width;
+// void	continue_thretment_unsigned(global_varible *g_varible, long number, char *number_str)
+// {
+// 	int length_number;
+// 	int new_len_nbr;
+// 	int start_number;
+// 	int new_width;
 
-	length_number = len_number(number);
-	new_len_nbr = g_varible->accuracy - length_number; // 5 - 2 = 3
-	if (new_len_nbr < 0)
-		new_len_nbr = 0;
-	new_len_nbr = new_len_nbr + length_number; // 3 + 2 = 5
-	start_number = 0;
-	if (number < 0) // если число отрицательное
-	{
-		new_len_nbr = new_len_nbr + 1;
-		start_number = 1;
-	}
-	new_width = new_width_unsigned(g_varible->width, new_len_nbr/*, number*/);
-	if (g_varible->width >= 0)
-		output_width_unsigned(0, new_width, g_varible);
-	output_accuracy_unsigned(length_number, new_len_nbr, number, g_varible->accuracy);
-	while (number_str[start_number]) // вывод числа по символам
-		write(1, &number_str[start_number++], 1);
-	if (g_varible->width < 0)
-		output_width_unsigned(0, new_width, g_varible);
-}
+// 	length_number = len_number(number);
+// 	new_len_nbr = g_varible->accuracy - length_number; // 5 - 2 = 3
+// 	if (new_len_nbr < 0)
+// 		new_len_nbr = 0;
+// 	new_len_nbr = new_len_nbr + length_number; // 3 + 2 = 5
+// 	start_number = 0;
+// 	if (number < 0) // если число отрицательное
+// 	{
+// 		new_len_nbr = new_len_nbr + 1;
+// 		start_number = 1;
+// 	}
+// 	new_width = new_width_unsigned(g_varible->width, new_len_nbr/*, number*/);
+// 	if (g_varible->width >= 0)
+// 		output_width_unsigned(0, new_width, g_varible);
+// 	output_accuracy_unsigned(length_number, new_len_nbr, number, g_varible->accuracy);
+// 	while (number_str[start_number]) // вывод числа по символам
+// 		write(1, &number_str[start_number++], 1);
+// 	if (g_varible->width < 0)
+// 		output_width_unsigned(0, new_width, g_varible);
+// }
 // строка начинается с флага
-void	substitution_value_width_u(const char *s, global_varible *g_varible, va_list *va_args, char symbol)
-{
-	int start;
-	int number_negative;
+// void	substitution_value_width_u(const char *s, global_varible *g_varible, va_list *va_args, char symbol)
+// {
+// 	int start;
+// 	int number_negative;
 
-	start = 0;
-	number_negative = 0;
-	while (s[start] != '%')
-		start--;
-	while (s[start] != '-' && s[start] != '*'
-		&& s[start] != symbol && s[start] != '.')
-		start++;
-	if (s[start] == '-')
-	{
-		number_negative = 1;
-		start++;
-	}
-	while (s[start] != '*' && s[start] != symbol && s[start] != '.')
-		start++;
-	if (s[start] == '*')
-	{
-		g_varible->width = va_arg(*va_args, int);
-		if (number_negative == 1 && g_varible->width > 0)
-			g_varible->width = g_varible->width * (-1);
-	}
-	va_end(*va_args);
-}
+// 	start = 0;
+// 	number_negative = 0;
+// 	while (s[start] != '%')
+// 		start--;
+// 	while (s[start] != '-' && s[start] != '*'
+// 		&& s[start] != symbol && s[start] != '.')
+// 		start++;
+// 	if (s[start] == '-')
+// 	{
+// 		number_negative = 1;
+// 		start++;
+// 	}
+// 	while (s[start] != '*' && s[start] != symbol && s[start] != '.')
+// 		start++;
+// 	if (s[start] == '*')
+// 	{
+// 		g_varible->width = va_arg(*va_args, int);
+// 		if (number_negative == 1 && g_varible->width > 0)
+// 			g_varible->width = g_varible->width * (-1);
+// 	}
+// 	va_end(*va_args);
+// }
+
 // строка начинается с флага
-void	substitution_value_accuracy_u(const char *s, global_varible *g_varible, va_list *va_args)
-{
-	int start;
+// void	substitution_value_accuracy_u(const char *s, global_varible *g_varible, va_list *va_args)
+// {
+// 	int start;
 
-	start = 0;
-	while (s[start] != '.' && s[start] != '%')
-		start--;
-	if (s[start] != '.')
-		return ;
-	else
-	{
-		if (s[start + 1] == '*')
-		{
-			g_varible->accuracy = va_arg(*va_args, int);
-			// printf("accuracy: %d\n", g_varible->accuracy);
-		}
-	}
-	va_end(*va_args);
-}
+// 	start = 0;
+// 	while (s[start] != '.' && s[start] != '%')
+// 		start--;
+// 	if (s[start] != '.')
+// 		return ;
+// 	else
+// 	{
+// 		if (s[start + 1] == '*')
+// 		{
+// 			g_varible->accuracy = va_arg(*va_args, int);
+// 			// printf("accuracy: %d\n", g_varible->accuracy);
+// 		}
+// 	}
+// 	va_end(*va_args);
+// }
 
-void	threatment_unsigned(const char *s, va_list *va_args, global_varible *g_varible)
-{
-	unsigned int number_from_args;
-	// int accuracy;
-	// int width;
-	char *number_str;
+// void	threatment_unsigned(const char *s, va_list *va_args, global_varible *g_varible)
+// {
+// 	unsigned int number_from_args;
+// 	// int accuracy;
+// 	// int width;
+// 	char *number_str;
 
-	g_varible->width = take_width(&s[0]); // ширина
-	g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
-	g_varible->str = &s[0]; // передал место с флагом (d)
-	substitution_value_width_u(&s[0], g_varible, va_args, 'u');
-	substitution_value_accuracy_u(&s[0], g_varible, va_args);
-	number_from_args = va_arg(*va_args, unsigned int); // число из аргумента
-	// printf("number_from_args: %u\n", number_from_args);
-	if (number_from_args == 0 && g_varible->accuracy == 0)
-	{
-		number_str = ft_strdup("");
-		if (g_varible->width >= 0)
-			g_varible->width = g_varible->width + 1;
-		else
-			g_varible->width = g_varible->width - 1;
-	}
-	else
-		number_str = ft_itoa_u(number_from_args); // число в строке
-	// printf("number_str: %s\n", number_str);
-	continue_thretment_unsigned(g_varible, number_from_args, number_str); // продолжение
-	free(number_str);
-	va_end(*va_args);
-}
+// 	g_varible->width = take_width(&s[0]); // ширина
+// 	g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
+// 	g_varible->str = &s[0]; // передал место с флагом (d)
+// 	substitution_value_width_u(&s[0], g_varible, va_args, 'u');
+// 	substitution_value_accuracy_u(&s[0], g_varible, va_args);
+// 	number_from_args = va_arg(*va_args, unsigned int); // число из аргумента
+// 	// printf("number_from_args: %u\n", number_from_args);
+// 	if (number_from_args == 0 && g_varible->accuracy == 0)
+// 	{
+// 		number_str = ft_strdup("");
+// 		if (g_varible->width >= 0)
+// 			g_varible->width = g_varible->width + 1;
+// 		else
+// 			g_varible->width = g_varible->width - 1;
+// 	}
+// 	else
+// 		number_str = ft_itoa_u(number_from_args); // число в строке
+// 	// printf("number_str: %s\n", number_str);
+// 	continue_thretment_unsigned(g_varible, number_from_args, number_str); // продолжение
+// 	free(number_str);
+// 	zeroing_value(g_varible);
+// 	va_end(*va_args);
+// }
 #pragma endregion
 
 #pragma region threatment_integer
@@ -514,33 +523,33 @@ int		new_width_i(int width, int length_number/*, int number*/)
 	return (width);
 }
 
-void	continue_thretment_integer(global_varible *g_varible, int number, char *number_str)
-{
-	int length_number;
-	int new_len_nbr;
-	int start_number;
-	int new_width;
+// void	continue_thretment_integer(global_varible *g_varible, int number, char *number_str)
+// {
+// 	int length_number;
+// 	int new_len_nbr;
+// 	int start_number;
+// 	int new_width;
 
-	length_number = len_number(number);
-	new_len_nbr = g_varible->accuracy - length_number; // 5 - 2 = 3
-	if (new_len_nbr < 0)
-		new_len_nbr = 0;
-	new_len_nbr = new_len_nbr + length_number; // 3 + 2 = 5
-	start_number = 0;
-	if (number < 0) // если число отрицательное
-	{
-		new_len_nbr = new_len_nbr + 1;
-		start_number = 1;
-	}
-	new_width = new_width_i(g_varible->width, new_len_nbr/*, number*/);
-	if (g_varible->width >= 0)
-		output_width_integer(0, new_width, g_varible);
-	output_accuracy_integer(length_number, new_len_nbr, number, g_varible->accuracy);
-	while (number_str[start_number]) // вывод числа по символам
-		write(1, &number_str[start_number++], 1);
-	if (g_varible->width < 0)
-		output_width_integer(0, new_width, g_varible);
-}
+// 	length_number = len_number(number);
+// 	new_len_nbr = g_varible->accuracy - length_number; // 5 - 2 = 3
+// 	if (new_len_nbr < 0)
+// 		new_len_nbr = 0;
+// 	new_len_nbr = new_len_nbr + length_number; // 3 + 2 = 5
+// 	start_number = 0;
+// 	if (number < 0) // если число отрицательное
+// 	{
+// 		new_len_nbr = new_len_nbr + 1;
+// 		start_number = 1;
+// 	}
+// 	new_width = new_width_i(g_varible->width, new_len_nbr/*, number*/);
+// 	if (g_varible->width >= 0)
+// 		output_width_integer(0, new_width, g_varible);
+// 	output_accuracy_integer(length_number, new_len_nbr, number, g_varible->accuracy);
+// 	while (number_str[start_number]) // вывод числа по символам
+// 		write(1, &number_str[start_number++], 1);
+// 	if (g_varible->width < 0)
+// 		output_width_integer(0, new_width, g_varible);
+// }
 // строка начинается с флага
 void	substitution_value_width_i(const char *s, global_varible *g_varible, va_list *va_args, char symbol)
 {
@@ -590,34 +599,35 @@ void	substitution_value_accuracy_i(const char *s, global_varible *g_varible, va_
 	va_end(*va_args);
 }
 
-void	threatment_integer(const char *s, va_list *va_args, global_varible *g_varible)
-{
-	int number_from_args;
-	// int accuracy;
-	// int width;
-	char *number_str;
+// void	threatment_integer(const char *s, va_list *va_args, global_varible *g_varible)
+// {
+// 	int number_from_args;
+// 	// int accuracy;
+// 	// int width;
+// 	char *number_str;
 
-	g_varible->width = take_width(&s[0]); // ширина
-	g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
-	g_varible->str = &s[0]; // передал место с флагом (d)
-	substitution_value_width_i(&s[0], g_varible, va_args, 'i');
-	substitution_value_accuracy_i(&s[0], g_varible, va_args);
-	number_from_args = va_arg(*va_args, int); // число из аргумента
-	// printf("number_from_args: %d\n", number_from_args);
-	if (number_from_args == 0 && g_varible->accuracy == 0)
-	{
-		number_str = ft_strdup("");
-		if (g_varible->width >= 0)
-			g_varible->width = g_varible->width + 1;
-		else
-			g_varible->width = g_varible->width - 1;
-	}
-	else
-		number_str = ft_itoa(number_from_args); // число в строке
-	continue_thretment_integer(g_varible, number_from_args, number_str); // продолжение
-	free(number_str);
-	va_end(*va_args);
-}
+// 	g_varible->width = take_width(&s[0]); // ширина
+// 	g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
+// 	g_varible->str = &s[0]; // передал место с флагом (d)
+// 	substitution_value_width_i(&s[0], g_varible, va_args, 'i');
+// 	substitution_value_accuracy_i(&s[0], g_varible, va_args);
+// 	number_from_args = va_arg(*va_args, int); // число из аргумента
+// 	// printf("number_from_args: %d\n", number_from_args);
+// 	if (number_from_args == 0 && g_varible->accuracy == 0)
+// 	{
+// 		number_str = ft_strdup("");
+// 		if (g_varible->width >= 0)
+// 			g_varible->width = g_varible->width + 1;
+// 		else
+// 			g_varible->width = g_varible->width - 1;
+// 	}
+// 	else
+// 		number_str = ft_itoa(number_from_args); // число в строке
+// 	continue_thretment_integer(g_varible, number_from_args, number_str); // продолжение
+// 	free(number_str);
+// 	zeroing_value(g_varible);
+// 	va_end(*va_args);
+// }
 #pragma endregion
 
 #pragma region string
@@ -717,6 +727,7 @@ void	threatment_string(const char *s, va_list *va_args, global_varible *g_varibl
 	continue_string(number_from_args/*, va_args*/, g_varible);
 	if (value_is_null)
 		free(number_from_args);
+	zeroing_value(g_varible);
 	va_end(*va_args);
 }
 #pragma endregion
@@ -769,6 +780,7 @@ void	threatment_char(const char *s, va_list *va_args, global_varible *g_varible)
 	continue_char(number_from_args/*, va_args*/, g_varible);
 	// if (value_is_null)
 	// 	free(number_from_args);
+	zeroing_value(g_varible);
 	va_end(*va_args);
 }
 #pragma endregion
@@ -895,6 +907,7 @@ void	threatment_hex(const char *s, va_list *va_args, global_varible *g_varible)
 		ptr = malloc(count_devision * sizeof(char));
 	}
 	hex_continue(ptr, count_devision, number, g_varible);
+	zeroing_value(g_varible);
 	free(ptr);
 }
 
@@ -985,7 +998,9 @@ void	threatment_hex_h(const char *s, va_list *va_args, global_varible *g_varible
 	int count_devision;
 
 	g_varible->width = take_width(&s[0]);
+	count_devision = 0;
 	g_varible->accuracy = take_accuracy(&s[0], g_varible);
+	// printf("exist_accuracy: %d\n", g_varible->exist_accuracy);
 	g_varible->str = &s[0];
 	substitution_value_width(&s[0], g_varible, va_args, 'X');
 	substitution_value_accuracy(&s[0], g_varible, va_args);
@@ -1004,6 +1019,7 @@ void	threatment_hex_h(const char *s, va_list *va_args, global_varible *g_varible
 		ptr = malloc(count_devision * sizeof(char));
 	}
 	hex_continue_h(ptr, count_devision, number, g_varible);
+	zeroing_value(g_varible);
 	free(ptr);
 }
 #pragma endregion
@@ -1104,6 +1120,7 @@ void	threatment_p(const char *s, va_list *va_args, global_varible *g_varible)
 		ptr = malloc(count_devision * sizeof(char));
 	}
 	continue_thretment_p(ptr, count_devision, number, g_varible);
+	zeroing_value(g_varible);
 	free(ptr);
 }
 
@@ -1187,16 +1204,18 @@ void	output_width_procent(int length_number, int number_width, global_varible *g
 	g_varible->length = g_varible->length + length_number;
 }
 
-void	continue_procent(const char *s, va_list *va_args, global_varible *g_varible)
+void	continue_procent(/*const char *s, va_list *va_args, */global_varible *g_varible)
 {
 	int len_str;
 
-	len_str = g_varible->width - 1;
+	if (g_varible->width < 0)
+		len_str = g_varible->width + 1;
+	else
+		len_str = g_varible->width - 1;
 	// printf("g_varible->width: %d", len_str);
 	if (g_varible->width >= 0)
-	{
 		output_width_procent(0, len_str, g_varible);
-	}
+	// printf("%d", len_str);
 	write(1, "%", 1);
 	if (g_varible->width < 0)
 	{
@@ -1266,7 +1285,8 @@ void	threatment_procent(const char *s, va_list *va_args, global_varible *g_varib
 	// count_devision = 1;
 	substitution_value_width_proc(&s[0], g_varible, va_args, '%');
 	// printf("width: %d", g_varible->width);
-	continue_procent(s, va_args, g_varible);
+	continue_procent(/*s, va_args, */g_varible);
+	zeroing_value(g_varible);
 	// substitution_value_accuracy(&s[0], g_varible, va_args);
 	// printf("accuracy: %d", g_varible->accuracy);
 	// number = (unsigned long)va_arg(*va_args, void *);
@@ -1290,62 +1310,75 @@ void	threatment_procent(const char *s, va_list *va_args, global_varible *g_varib
 
 #pragma endregion
 
+int		manage_fuction1(const char *s, global_varible *g_varible, va_list *va_args)
+{
+	if (s[g_varible->start] == 'x')
+	{
+		threatment_hex(&s[g_varible->start], va_args, g_varible);
+		return (1);
+	}
+	else if (s[g_varible->start] == 'X')
+	{
+		threatment_hex_h(&s[g_varible->start], va_args, g_varible);
+		return (1);
+	}
+	else if (s[g_varible->start] == 'p')
+	{
+		threatment_p(&s[g_varible->start], va_args, g_varible);
+		return (1);
+	}
+	else if (s[g_varible->start + 1] == '%')
+	{
+		g_varible->start++;
+		threatment_procent(&s[g_varible->start], va_args, g_varible);
+		return (1);
+	}
+	return (0);
+}
+
+int		manage_fuction2(const char *s, global_varible *g_varible, va_list *va_args)
+{
+	if (s[g_varible->start] == 'i')
+	{
+		threatment_integer(&s[g_varible->start], va_args, g_varible);
+		return (1);
+	}
+	else if (s[g_varible->start] == 's')
+	{
+		threatment_string(&s[g_varible->start], va_args, g_varible);
+		return (1);
+	}
+	else if (s[g_varible->start] == 'c')
+	{
+		threatment_char(&s[g_varible->start], va_args, g_varible);
+		return (1);
+	}
+	return (0);
+}
+
 void	manage_fuction(const char *s, global_varible *g_varible, va_list *va_args)
 {
-	int start;
-
-	start = 0;
-	while (s[start])
+	g_varible->start = 0;
+	while (s[g_varible->start])
 	{
-		if (s[start] == 'd')
+		if (s[g_varible->start] == 'd')
 		{
-			threatment_int(&s[start], va_args, g_varible);
+			threatment_int(&s[g_varible->start], va_args, g_varible);
 			break ;
 		}
-		else if (s[start] == 'u')
+		else if (s[g_varible->start] == 'u')
 		{
-			threatment_unsigned(&s[start], va_args, g_varible);
+			threatment_unsigned(&s[g_varible->start], va_args, g_varible);
 			break ;
 		}
-		else if (s[start] == 'i')
-		{
-			threatment_integer(&s[start], va_args, g_varible);
+		else if (manage_fuction2(s, g_varible, va_args))
 			break ;
-		}
-		else if (s[start] == 's')
-		{
-			threatment_string(&s[start], va_args, g_varible);
+		else if (manage_fuction1(s, g_varible, va_args))
 			break ;
-		}
-		else if (s[start] == 'c')
-		{
-			threatment_char(&s[start], va_args, g_varible);
-			break ;
-		}
-		else if (s[start] == 'x')
-		{
-			threatment_hex(&s[start], va_args, g_varible);
-			break ;
-		}
-		else if (s[start] == 'X')
-		{
-			threatment_hex_h(&s[start], va_args, g_varible);
-			break ;
-		}
-		else if (s[start] == 'p')
-		{
-			threatment_p(&s[start], va_args, g_varible);
-			break ;
-		}
-		else if (s[start + 1] == '%')
-		{
-			start++;
-			threatment_procent(&s[start], va_args, g_varible);
-			break ;
-		}
-		start++;
+		g_varible->start++;
 	}
-	(*g_varible).index_main_str = (*g_varible).index_main_str + start;
+	(*g_varible).index_main_str = (*g_varible).index_main_str + g_varible->start;
+	g_varible->start = 0;
 }
 
 int		free_struct(global_varible *g_varible, va_list *va_args)
@@ -1374,6 +1407,7 @@ int		ft_printf(const char *s, ...)
 			g_varible->index_main_str = start; // присваиваю глобальному индексу, где остановился
 			manage_fuction(&s[start], g_varible, &va_args); // обработчик флагов
 			start = g_varible->index_main_str; // передвигаю индекс вперед
+			g_varible->accuracy = 0;
 		}
 		else
 			write(1, &s[start], 1);
@@ -1463,12 +1497,28 @@ int main()
 
 	#pragma region pointer
 	// char *p;
-	// printf("%-10.5%\n", 5);
-	// ft_printf("%10%\n");
+	printf("%*.5i\n", 15, 100);
+	ft_printf("%*.5i\n", 15, 100);
 	#pragma endregion
 
 	#pragma region procent
 	// printf("%010%\n", 10);
-	ft_printf("%0*%\n", 10);
+	// printf("%0*% %10% %-10% %10.5d\n", 10, 228);
+	// ft_printf("%0*% %10% %-10% %10.5d\n", 10, 228);
+	// ft_printf("%10%\n");
+	// printf("%10%\n");
+	#pragma endregion
+
+	#pragma region all_flag
+	// ft_printf("%d, %010.5X\n", 10, 1337);
+	// printf("%d, %010.5X\n", 10, 1337);
+	// ft_printf("%10.5d, %*.*u %i, %-10.5x, %010.5X, %p, %s %10c\n", 228, 15, 5, 1000, 1337, 12345678, 43, NULL, NULL, '?');
+	// printf("%10.5d, %*.*u %i, %-10.5x, %010.5X, %p, %s %10c\n", 228, 15, 5, 1000, 1337, 12345678, 43, NULL, NULL, '?');
+	// while (1);
+	// ft_printf("%10.5d, %*.*u %i, %010.5X, %p, %s %10c\n", 228, 15, 5, 1337, 12345678, 43, NULL, NULL, '?');
+	// printf("%10.5d, %*.*u %i, %010.5X, %p, %s %10c\n", 228, 15, 5, 1337, 12345678, 43, NULL, NULL, '?');
+
+	// ft_printf("%15......10d", 99999);
+	// printf("%15......10d", 99999);
 	#pragma endregion
 }
