@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 19:45:21 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 19:45:55 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 13:22:39 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 int		negative_exist_procent(const char *str, char symbol)
 {

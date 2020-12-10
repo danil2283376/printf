@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_other_f.c                                       :+:      :+:    :+:   */
+/*   ft_pars.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:25:25 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 14:32:37 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 15:03:47 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 int	len_number(long nbr)
 {
@@ -68,6 +68,8 @@ int		take_accuracy(const char *s, global_varible *g_varible/*, va_list *va_args,
 		g_varible->exist_accuracy = 0;
 		return (0);
 	}
+	else
+		g_varible->exist_accuracy = 1;
 	number_accuracy = ft_atoi(&s[start + 1]);
 	if (number_accuracy < 0)
 		return (0);

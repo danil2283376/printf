@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:43:07 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 17:09:46 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 17:02:31 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 void	output_width_int(int length_number, int number_width, global_varible *g_varible, char symbol)
 {
@@ -18,11 +18,13 @@ void	output_width_int(int length_number, int number_width, global_varible *g_var
 	char symbol1;
 	int boolean_zero;
 	int symbol_negative;
+	int boolean;
 
 	start = 0;
 	(void)symbol;
 	symbol1 = ' ';
 	symbol_negative = 0;
+	boolean = 0;
 	boolean_zero = zero_exist(g_varible->str);
 	symbol_negative = negative_exist(g_varible->str, symbol);
 	if (length_number > number_width)
@@ -33,21 +35,25 @@ void	output_width_int(int length_number, int number_width, global_varible *g_var
 		return ;
 	if (boolean_zero == 1 && g_varible->exist_accuracy == 0
 		&& symbol_negative == 0)
-		symbol1 = '0';
+			symbol1 = '0';
 	while (length_number++ < number_width)
 		write(1, &symbol1, 1);
 }
 
 // длина числа в символах, и число точности, и само число
-void	output_accuracy_int(int length_number, int number_accuracy, long number, int accuracy)
+void	output_accuracy_int(int length_number, int number_accuracy, long number, global_varible *g_varible)
 {
-	if (accuracy == 0)
+	if (g_varible->accuracy == 0)
 		number_accuracy = 0;
 	if (number_accuracy < 0)
 		number_accuracy = 0;
 	if (number < 0)
 	{
-		write(1, "-", 1);
+		// if (g_varible->exist_accuracy == 0)
+		// if (g_varible->exist_accuracy == 1)
+		// if (g_varible->exist_accuracy == 1)
+		// if (zero_exist(g_varible->str) == 0)
+			// write(1, "-", 1);
 		number = number * (-1);
 		number_accuracy = number_accuracy - 1;
 	}

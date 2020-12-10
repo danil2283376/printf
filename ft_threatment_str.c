@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:55:45 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 19:17:34 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 19:06:56 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 static int	output_accuracy_string(int end, char *s, global_varible *g_varible, int boolean)
 {
@@ -28,10 +28,7 @@ static int	output_accuracy_string(int end, char *s, global_varible *g_varible, i
 	else
 	{
 		if (g_varible->accuracy <= length_string && g_varible->exist_accuracy)
-		{
-			// printf("1234");
 			length_string = g_varible->accuracy;
-		}
 	}
 	return (length_string);
 }
@@ -56,11 +53,28 @@ static void	continue_string(char *s/*, va_list *va_args*/, global_varible *g_var
 		output_width_int/*string*/(0, new_width, g_varible, 's');
 }
 
+static int	threatment_null(global_varible *g_varible, char **str)
+{
+	int value_is_null;
+
+	value_is_null = 0;
+	if (*str == NULL && g_varible->accuracy < 0)
+	{
+		*str = ft_strdup("(null)");
+		value_is_null = 1;
+		g_varible->accuracy = 6;
+	}
+	else if (*str == NULL)
+	{
+		*str = ft_strdup("(null)");
+		value_is_null = 1;
+	}
+	return (value_is_null);
+}
+
 void	threatment_string(const char *s, va_list *va_args, global_varible *g_varible)
 {
-	//смысл один и тот же просто выводить строку
-	//и при точности обрезать строку
-	char *number_from_args;
+	char *str;
 	int value_is_null;
 
 	value_is_null = 0;
@@ -70,17 +84,11 @@ void	threatment_string(const char *s, va_list *va_args, global_varible *g_varibl
 	g_varible->str = &s[0]; // передал место с флагом (d)
 	substitution_value_width(&s[0], g_varible, va_args, 's');
 	substitution_value_accuracy(&s[0], g_varible, va_args);
-	number_from_args = va_arg(*va_args, char *); // строка из аргумента
-	if (number_from_args == NULL)
-	{
-		number_from_args = ft_strdup("(null)");
-		value_is_null = 1;
-		// printf("1%s", number_from_args);
-	}
-	// printf("%s", number_from_args);
-	continue_string(number_from_args/*, va_args*/, g_varible);
+	str = va_arg(*va_args, char *); // строка из аргумента
+	value_is_null = threatment_null(g_varible, &str);
+	continue_string(str/*, va_args*/, g_varible);
 	if (value_is_null)
-		free(number_from_args);
+		free(str);
 	zeroing_value(g_varible);
 	va_end(*va_args);
 }

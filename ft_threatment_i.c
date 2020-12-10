@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:21:19 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 17:28:58 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 14:03:38 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 static void	continue_thretment_integer(global_varible *g_varible, int number, char *number_str)
 {
@@ -33,7 +33,7 @@ static void	continue_thretment_integer(global_varible *g_varible, int number, ch
 	new_width = new_width1/*_i*/(g_varible->width, new_len_nbr/*, number*/);
 	if (g_varible->width >= 0)
 		output_width_int/*eger*/(0, new_width, g_varible, 'i');
-	output_accuracy_int/*eger*/(length_number, new_len_nbr, number, g_varible->accuracy);
+	output_accuracy_int/*eger*/(length_number, new_len_nbr, number, g_varible);
 	while (number_str[start_number]) // вывод числа по символам
 		write(1, &number_str[start_number++], 1);
 	if (g_varible->width < 0)

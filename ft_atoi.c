@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/30 19:01:31 by scolen            #+#    #+#             */
-/*   Updated: 2020/11/12 10:46:59 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 13:22:35 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 static int					ft_check_minus(const char *s)
 {

@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 19:16:59 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 19:20:53 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 13:23:08 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 static void	continue_char(char symbol, global_varible *g_varible)
 {

@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 15:06:48 by scolen            #+#    #+#             */
-/*   Updated: 2020/11/06 19:39:32 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 13:23:38 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 int	ft_toupper(int ch)
 {

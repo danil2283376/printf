@@ -2,7 +2,7 @@ SRC = $(shell find . -name "ft_*.c")
 
 OBJC = ${SRS:.c=.o}
 
-NAME = libft.a
+NAME = libftprintf.a
 
 FLAG = -Wall -Wextra -Werror
 

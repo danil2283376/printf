@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 19:42:49 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 19:48:10 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 13:23:23 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 // static int		zero_exist_procent(const char *str)
 // {

@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 17:16:16 by scolen            #+#    #+#             */
-/*   Updated: 2020/11/06 19:38:20 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 13:22:50 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 static int	length_number(long n)
 {

@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 16:57:19 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/06 21:30:35 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 13:23:03 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 char	*ft_strdup(const char *str)
 {

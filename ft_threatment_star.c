@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 15:18:56 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 16:45:06 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 13:23:25 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 void	zeroing_value(global_varible *g_varible)
 {

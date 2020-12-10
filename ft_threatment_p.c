@@ -6,11 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 19:35:22 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 19:40:55 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 14:06:55 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libftprintf.h"
 
 static void	output_p(char *ptr, int count_devision)
 {
@@ -44,7 +44,7 @@ static void	continue_thretment_p(char *ptr, int count_devision, long number, glo
 	write(1, "x", 1);
 	if (g_varible->width >= 0 && zero_exist(g_varible->str) == 1 && g_varible->exist_accuracy == 0)
 		output_width_int/*p*/(0, new_width, g_varible, 'p');
-	output_accuracy_int(count_devision, new_len_nbr, number, g_varible->accuracy);
+	output_accuracy_int(count_devision, new_len_nbr, number, g_varible);
 	g_varible->length = g_varible->length + count_devision;
 	output_p(ptr, count_devision);
 	if (g_varible->width < 0)

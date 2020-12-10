@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   libftprintf.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 19:35:41 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/09 19:47:01 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/10 20:49:28 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#ifndef LIBFTPRINTF_H
+# define LIBFTPRINTF_H
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -28,6 +28,8 @@ typedef struct	struct_global_varible
 	int			width;
 	int			zero_exist;
 	int			start;
+	int			number;
+	int			flag;
 }				global_varible;
 
 typedef struct		s_list
@@ -94,7 +96,7 @@ int					len_number(long nbr);
 void				output_width_int(int length_number,
 		int number_width, global_varible *g_varible, char symbol);
 void				output_accuracy_int(int length_number,
-		int number_accuracy, long number, int accuracy);
+		int number_accuracy, long number, global_varible *g_varible);
 int					new_width1(int width, int length_number);
 void				substitution_value_width(const char *s,
 		global_varible *g_varible, va_list *va_args, char symbol);
