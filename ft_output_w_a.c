@@ -6,11 +6,19 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:43:07 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 17:02:31 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/11 17:03:58 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
+
+void	zeroing_value_struct(global_varible *g_varible)
+{
+	if (g_varible->accuracy < 0)
+	{
+		g_varible->exist_accuracy = 0;
+	}
+}
 
 void	output_width_int(int length_number, int number_width, global_varible *g_varible, char symbol)
 {
@@ -33,11 +41,14 @@ void	output_width_int(int length_number, int number_width, global_varible *g_var
 		number_width = number_width * (-1);
 	if (length_number > number_width)
 		return ;
+		// printf("g_varible->accuracy: %d", g_varible->accuracy);
+	zeroing_value_struct(g_varible);
 	if (boolean_zero == 1 && g_varible->exist_accuracy == 0
-		&& symbol_negative == 0)
+		&& symbol_negative == 0 && g_varible->width >= 0)
 			symbol1 = '0';
 	while (length_number++ < number_width)
-		write(1, &symbol1, 1);
+		ft_putchar_fd(symbol1, 1, g_varible);
+		// write(1, &symbol1, 1);
 }
 
 // длина числа в символах, и число точности, и само число
@@ -58,7 +69,8 @@ void	output_accuracy_int(int length_number, int number_accuracy, long number, gl
 		number_accuracy = number_accuracy - 1;
 	}
 	while (length_number++ < number_accuracy)
-		write(1, "0", 1);
+		ft_putchar_fd('0', 1, g_varible);
+		// write(1, "0", 1);
 }
 
 int		new_width1(int width, int length_number)

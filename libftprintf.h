@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/06 19:35:41 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 20:49:28 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/11 18:44:25 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char				*ft_strtrim(char const *s1, char const *set);
 char				**ft_split(char const *s, char c);
 char				*ft_itoa(int n);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-void				ft_putchar_fd(char c, int fd);
+// void				ft_putchar_fd(char c, int fd);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
@@ -86,6 +86,8 @@ void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst,
 		void *(*f)(void *), void (*del)(void *));
 
+void				ft_putchar_fd(char c, int fd,
+		global_varible *g_varible);
 char				*ft_itoa_u(unsigned int n);
 int					ft_printf(const char *s, ...);
 int					take_width(const char *s);

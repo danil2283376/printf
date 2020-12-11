@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 19:16:59 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 13:23:08 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/11 15:16:19 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ static void	continue_char(char symbol, global_varible *g_varible)
 	new_width = new_width1(g_varible->width, length_string/*, number*/);
 	if (g_varible->width >= 0)
 		output_width_int/*string*/(0, new_width, g_varible, 'c');
-	write(1, &symbol, 1);
-	g_varible->length++;
+	// write(1, &symbol, 1);
+	ft_putchar_fd(symbol, 1, g_varible);
+	// g_varible->length++;
 	// output_accuracy_string(length_string, s, g_varible, 1);
 	if (g_varible->width < 0)
 		output_width_int/*string*/(0, new_width, g_varible, 'c');

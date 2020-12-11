@@ -6,32 +6,11 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 19:30:31 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 21:09:26 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/11 15:16:33 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
-
-// char	value_hex_h(int symbol)
-// {
-// 	char return_char;
-// 	return_char = '0';
-// 	if (symbol >= 0 && symbol <= 9)
-// 		return_char = symbol + '0';
-// 	else if (symbol == 10)
-// 		return_char = 'A';
-// 	else if (symbol == 11)
-// 		return_char = 'B';
-// 	else if (symbol == 12)
-// 		return_char = 'C';
-// 	else if (symbol == 13)
-// 		return_char = 'D';
-// 	else if (symbol == 14)
-// 		return_char = 'E';
-// 	else if (symbol == 15)
-// 		return_char = 'F';
-// 	return (return_char);
-// }
 
 static void	hex_continue_h(char *ptr, int count_devision, long number, global_varible *g_varible)
 {
@@ -48,17 +27,17 @@ static void	hex_continue_h(char *ptr, int count_devision, long number, global_va
 		ptr[0] = '0';
 	while (start < count_devision && number > 0)
 	{
-		ptr[start] = ft_toupper(value_hex/*_h*/(number % 16));
+		ptr[start++] = ft_toupper(value_hex/*_h*/(number % 16));
 		number = number / 16;
-		start++;
 	}
 	new_width = new_width1(g_varible->width, new_len_nbr/*, number*/);
 	if (g_varible->width >= 0)
 		output_width_int/*hex_h*/(0, new_width, g_varible, 'X');
 	output_accuracy_int(count_devision, new_len_nbr, number, g_varible);
-	g_varible->length = g_varible->length + count_devision;
+	// g_varible->length = g_varible->length + count_devision;
 	while (count_devision > 0 && ptr[count_devision - 1])
-		write(1, &ptr[--count_devision], 1);
+		ft_putchar_fd(ptr[--count_devision], 1, g_varible);
+		// write(1, &ptr[--count_devision], 1);
 	if (g_varible->width < 0)
 		output_width_int/*hex_h*/(0, new_width, g_varible, 'X');
 }
@@ -72,19 +51,14 @@ void	threatment_hex_h(const char *s, va_list *va_args, global_varible *g_varible
 	g_varible->width = take_width(&s[0]);
 	count_devision = 0;
 	g_varible->accuracy = take_accuracy(&s[0], g_varible);
-	// printf("exist_accuracy: %d\n", g_varible->exist_accuracy);
 	g_varible->str = &s[0];
 	substitution_value_width(&s[0], g_varible, va_args, 'X');
 	substitution_value_accuracy(&s[0], g_varible, va_args);
 	number = va_arg(*va_args, unsigned int);
-	// g_varible->flag = 0;
-	if (number == 0 && g_varible->accuracy == 0 && g_varible->exist_accuracy == 1)
+	if (number == 0 && g_varible->accuracy == 0
+		&& g_varible->exist_accuracy == 1)
 	{
 		ptr = ft_strdup("");
-		if (g_varible->width >= 0)
-			g_varible->width = g_varible->width + 1;
-		else
-			g_varible->width = g_varible->width - 1;
 		g_varible->flag = 1;
 	}
 	else

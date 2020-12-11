@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 12:02:52 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 20:35:44 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/11 18:12:54 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,22 @@ void	continue_thretment_int1(global_varible *g_varible, int new_width, int numbe
 	int boolean;
 
 	boolean = 0;
+	if (g_varible->accuracy < 0)
+		g_varible->exist_accuracy = 0;
 	if (g_varible->width >= 0)
 	{
 		if (zero_exist(g_varible->str) && g_varible->exist_accuracy == 0 && number < 0)
 		{
-			write(1, "-", 1);
+			// printf("HELLLLL");
+			ft_putchar_fd('-', 1, g_varible);
+			// write(1, "-", 1);
 			boolean = 1;
 		}
 		output_width_int(0, new_width, g_varible, 'd');
 	}
 	if (boolean == 0 && number < 0)
-		write(1, "-", 1);
+		ft_putchar_fd('-', 1, g_varible);
+		// write(1, "-", 1);
 }
 
 static void	continue_thretment_int(global_varible *g_varible, int number, char *number_str)
@@ -52,7 +57,8 @@ static void	continue_thretment_int(global_varible *g_varible, int number, char *
 	continue_thretment_int1(g_varible, new_width, number);
 	output_accuracy_int(length_number, new_len_nbr, number, g_varible);
 	while (number_str[start_number]) // вывод числа по символам
-		write(1, &number_str[start_number++], 1);
+		ft_putchar_fd(number_str[start_number++], 1, g_varible);
+		// write(1, &number_str[start_number++], 1);
 	if (g_varible->width < 0)
 		output_width_int(0, new_width, g_varible, 'd');
 }

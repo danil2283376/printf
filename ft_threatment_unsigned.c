@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 16:58:05 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 18:49:36 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/11 14:50:43 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static void	continue_thretment_unsigned(global_varible *g_varible, long number, 
 		output_width_int/*_unsigned*/(0, new_width, g_varible, 'u');
 	output_accuracy_int/*_unsigned*/(length_number, new_len_nbr, number, g_varible);
 	while (number_str[start_number]) // вывод числа по символам
-		write(1, &number_str[start_number++], 1);
+		ft_putchar_fd(number_str[start_number++], 1, g_varible);
+		// write(1, &number_str[start_number++], 1);
 	if (g_varible->width < 0)
 		output_width_int/*_unsigned*/(0, new_width, g_varible, 'u');
 }

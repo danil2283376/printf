@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:55:45 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 19:06:56 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/11 19:31:41 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ static int	output_accuracy_string(int end, char *s, global_varible *g_varible, i
 	if (boolean)
 	{
 		while (start < end)
-			write(1, &s[start++], 1);
-		g_varible->length = g_varible->length + start;
+			ft_putchar_fd(s[start++], 1, g_varible);
+			// write(1, &s[start++], 1);
+		// g_varible->length = g_varible->length + start;
 	}
 	else
 	{
@@ -44,6 +45,8 @@ static void	continue_string(char *s/*, va_list *va_args*/, global_varible *g_var
 	// length_number = len_number(number);
 	length_string = ft_strlen(s);
 	start = 0;
+	if (g_varible->accuracy < 0)
+		g_varible->accuracy = length_string;
 	length_string = output_accuracy_string(length_string, s, g_varible, 0);
 	new_width = new_width1(g_varible->width, length_string/*, number*/);
 	if (g_varible->width >= 0)
@@ -79,6 +82,7 @@ void	threatment_string(const char *s, va_list *va_args, global_varible *g_varibl
 
 	value_is_null = 0;
 	g_varible->width = take_width(&s[0]); // ширина
+	// printf("%d", g_varible->width);
 	g_varible->accuracy = take_accuracy(&s[0], g_varible); // точность
 	// printf("accuracy: %d", g_varible->accuracy);
 	g_varible->str = &s[0]; // передал место с флагом (d)

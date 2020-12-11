@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 17:21:19 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 14:03:38 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/11 14:47:10 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static void	continue_thretment_integer(global_varible *g_varible, int number, ch
 		output_width_int/*eger*/(0, new_width, g_varible, 'i');
 	output_accuracy_int/*eger*/(length_number, new_len_nbr, number, g_varible);
 	while (number_str[start_number]) // вывод числа по символам
-		write(1, &number_str[start_number++], 1);
+		ft_putchar_fd(number_str[start_number++], 1, g_varible);
+		// write(1, &number_str[start_number++], 1);
 	if (g_varible->width < 0)
 		output_width_int/*eger*/(0, new_width, g_varible, 'i');
 }

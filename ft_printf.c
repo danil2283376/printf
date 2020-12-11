@@ -6,7 +6,7 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 09:22:52 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 21:05:32 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/11 19:34:34 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,13 +119,6 @@ int		ft_printf(const char *s, ...)
 		return (free_struct(g_varible, &va_args));
 	g_varible->length = 0;
 	standart_value(g_varible);
-	// printf("index_main_str: %d\n", g_varible->index_main_str);
-	// printf("length: %d\n", g_varible->length);
-	// printf("accuracy: %d\n", g_varible->accuracy);
-	// printf("exist_accuracy: %d\n", g_varible->exist_accuracy);
-	// printf("width: %d\n", g_varible->width);
-	// printf("zero_exist: %d\n", g_varible->zero_exist);
-	// printf("start: %d\n", g_varible->start);
 	while (s[start])
 	{
 		if (s[start] == '%')
@@ -137,17 +130,19 @@ int		ft_printf(const char *s, ...)
 			g_varible->accuracy = 0;
 		}
 		else
-			write(1, &s[start], 1);
+			ft_putchar_fd(s[start], 1, g_varible);
+			// write(1, &s[start], 1);
 		start++;
-		g_varible->length++;
+		// g_varible->length++;
 	}
 	free_struct(g_varible, &va_args);
 	va_end(va_args);
-	return (0);
+	return (g_varible->length);
 }
 
-int main()
-{
-	// printf("%.0X\n", 0);
-	ft_printf("%.0X", 0);
-}
+// int main()
+// {
+// 	// printf("1d0\n");
+// 	int len = ft_printf("%10.5d\n", 228);
+// 	printf("len = %d", len);
+// }
