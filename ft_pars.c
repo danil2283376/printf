@@ -6,13 +6,13 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 14:25:25 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 15:03:47 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/12 12:53:49 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int	len_number(long nbr)
+int		len_number(long nbr)
 {
 	int len_nbr;
 	int start;
@@ -48,12 +48,10 @@ int		take_width(const char *s)
 		start++;
 	}
 	number = ft_atoi(&s[start + 1]);
-	// if (value_zero = 1 && va_args->accuracy == 0)
-	// printf("\nnumber: %d\n", number);
 	return (number);
 }
 
-int		take_accuracy(const char *s, global_varible *g_varible/*, va_list *va_args, */)
+int		take_accuracy(const char *s, t_varible *g_varible)
 {
 	int start;
 	int number_accuracy;
@@ -64,7 +62,6 @@ int		take_accuracy(const char *s, global_varible *g_varible/*, va_list *va_args,
 		start--;
 	if (s[start] != '.')
 	{
-		// printf("exist_accuracy: %d", g_varible->exist_accuracy);
 		g_varible->exist_accuracy = 0;
 		return (0);
 	}
@@ -73,7 +70,6 @@ int		take_accuracy(const char *s, global_varible *g_varible/*, va_list *va_args,
 	number_accuracy = ft_atoi(&s[start + 1]);
 	if (number_accuracy < 0)
 		return (0);
-	//printf("%d", number_accuracy);
 	return (number_accuracy);
 }
 
@@ -104,11 +100,3 @@ int		negative_exist(const char *str, char symbol)
 		return (1);
 	return (0);
 }
-
-// void	zeroing_value(global_varible *g_varible)
-// {
-// 	g_varible->accuracy = 0;
-// 	g_varible->exist_accuracy = 1;
-// 	g_varible->width = 0;
-// 	g_varible->zero_exist = 0;
-// }

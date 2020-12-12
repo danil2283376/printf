@@ -6,20 +6,20 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 19:35:22 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/11 15:16:46 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/12 12:56:14 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-static void	output_p(char *ptr, int count_devision, global_varible *g_varible)
+static void	output_p(char *ptr, int count_devision, t_varible *g_varible)
 {
 	while (count_devision > 0 && ptr[count_devision - 1])
 		ft_putchar_fd(ptr[--count_devision], 1, g_varible);
-		// write(1, &ptr[--count_devision], 1);
 }
 
-static int		threatment_value(char **ptr, long long number, int count_devision)
+static int	threatment_value(char **ptr,
+	long long number, int count_devision)
 {
 	int start;
 
@@ -33,7 +33,8 @@ static int		threatment_value(char **ptr, long long number, int count_devision)
 	return (number);
 }
 
-static void	continue_thretment_p(char *ptr, int count_devision, long long number, global_varible *g_varible)
+static void	continue_thretment_p(char *ptr,
+	int count_devision, long long number, t_varible *g_varible)
 {
 	int new_len_nbr;
 	int new_width;
@@ -43,23 +44,23 @@ static void	continue_thretment_p(char *ptr, int count_devision, long long number
 		new_len_nbr = 0;
 	new_len_nbr = new_len_nbr + count_devision;
 	number = threatment_value(&ptr, number, count_devision);
-	new_width = new_width1(g_varible->width, new_len_nbr/*, number*/) - 2;
-	if ((g_varible->width >= 0 && zero_exist(g_varible->str) == 0) || g_varible->exist_accuracy != 0)
-		output_width_int/*_p*/(0, new_width, g_varible, 'p');
+	new_width = new_width1(g_varible->width, new_len_nbr) - 2;
+	if ((g_varible->width >= 0
+		&& zero_exist(g_varible->str) == 0) || g_varible->exist_accuracy != 0)
+		output_width_int(0, new_width, g_varible, 'p');
 	ft_putchar_fd('0', 1, g_varible);
 	ft_putchar_fd('x', 1, g_varible);
-	// write(1, "0", 1);
-	// write(1, "x", 1);
-	if (g_varible->width >= 0 && zero_exist(g_varible->str) == 1 && g_varible->exist_accuracy == 0)
-		output_width_int/*p*/(0, new_width, g_varible, 'p');
+	if (g_varible->width >= 0
+		&& zero_exist(g_varible->str) == 1 && g_varible->exist_accuracy == 0)
+		output_width_int(0, new_width, g_varible, 'p');
 	output_accuracy_int(count_devision, new_len_nbr, number, g_varible);
-	// g_varible->length = g_varible->length + count_devision;
 	output_p(ptr, count_devision, g_varible);
 	if (g_varible->width < 0)
-		output_width_int/*p*/(0, new_width, g_varible, 'p');
+		output_width_int(0, new_width, g_varible, 'p');
 }
 
-static int	threatment_null(char **ptr, global_varible *g_varible, long long number)
+static int	threatment_null(char **ptr,
+	t_varible *g_varible, long long number)
 {
 	int count_devision;
 
@@ -82,11 +83,12 @@ static int	threatment_null(char **ptr, global_varible *g_varible, long long numb
 	return (count_devision);
 }
 
-void	threatment_p(const char *s, va_list *va_args, global_varible *g_varible)
+void		threatment_p(const char *s,
+	va_list *va_args, t_varible *g_varible)
 {
-	long long number;
-	char *ptr;
-	int count_devision;
+	long long	number;
+	char		*ptr;
+	int			count_devision;
 
 	g_varible->width = take_width(&s[0]);
 	g_varible->accuracy = take_accuracy(&s[0], g_varible);

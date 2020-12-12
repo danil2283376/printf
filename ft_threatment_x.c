@@ -6,20 +6,19 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 19:22:22 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/11 15:17:07 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/12 12:55:21 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int		count_devisions(long number)
+int			count_devisions(long number)
 {
-	int quantity_devision;
-	long duplicate;
+	int		quantity_devision;
+	long	duplicate;
 
 	duplicate = number;
 	quantity_devision = 1;
-	// printf("%d\n", quantity_devision);
 	while (duplicate > 15)
 	{
 		quantity_devision++;
@@ -28,9 +27,10 @@ int		count_devisions(long number)
 	return (quantity_devision);
 }
 
-char	value_hex(int symbol)
+char		value_hex(int symbol)
 {
 	char return_char;
+
 	return_char = '0';
 	if (symbol >= 0 && symbol <= 9)
 		return_char = symbol + '0';
@@ -49,7 +49,7 @@ char	value_hex(int symbol)
 	return (return_char);
 }
 
-static int	threatment_null(char **ptr, global_varible *g_varible, long number)
+static int	threatment_null(char **ptr, t_varible *g_varible, long number)
 {
 	int count_devision;
 
@@ -72,7 +72,8 @@ static int	threatment_null(char **ptr, global_varible *g_varible, long number)
 	return (count_devision);
 }
 
-static void	hex_continue(char *ptr, int count_devision, long number, global_varible *g_varible)
+static void	hex_continue(char *ptr,
+	int count_devision, long number, t_varible *g_varible)
 {
 	int start;
 	int new_len_nbr;
@@ -90,23 +91,22 @@ static void	hex_continue(char *ptr, int count_devision, long number, global_vari
 		ptr[start++] = value_hex(number % 16);
 		number = number / 16;
 	}
-	new_width = new_width1(g_varible->width, new_len_nbr/*, number*/);
+	new_width = new_width1(g_varible->width, new_len_nbr);
 	if (g_varible->width >= 0)
-		output_width_int/*hex*/(0, new_width, g_varible, 'x');
+		output_width_int(0, new_width, g_varible, 'x');
 	output_accuracy_int(count_devision, new_len_nbr, number, g_varible);
-	// g_varible->length = g_varible->length + count_devision;
 	while (count_devision > 0 && ptr[count_devision - 1])
 		ft_putchar_fd(ptr[--count_devision], 1, g_varible);
-		// write(1, &ptr[--count_devision], 1);
 	if (g_varible->width < 0)
-		output_width_int/*hex*/(0, new_width, g_varible, 'x');
+		output_width_int(0, new_width, g_varible, 'x');
 }
 
-void	threatment_hex(const char *s, va_list *va_args, global_varible *g_varible)
+void		threatment_hex(const char *s,
+	va_list *va_args, t_varible *g_varible)
 {
-	long number;
-	char *ptr;
-	int count_devision;
+	long	number;
+	char	*ptr;
+	int		count_devision;
 
 	g_varible->width = take_width(&s[0]);
 	g_varible->accuracy = take_accuracy(&s[0], g_varible);

@@ -6,13 +6,13 @@
 /*   By: scolen <scolen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/09 15:18:56 by scolen            #+#    #+#             */
-/*   Updated: 2020/12/10 13:23:25 by scolen           ###   ########.fr       */
+/*   Updated: 2020/12/12 12:54:58 by scolen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-void	zeroing_value(global_varible *g_varible)
+void	zeroing_value(t_varible *g_varible)
 {
 	g_varible->accuracy = 0;
 	g_varible->exist_accuracy = 1;
@@ -20,10 +20,11 @@ void	zeroing_value(global_varible *g_varible)
 	g_varible->zero_exist = 0;
 }
 
-void	substitution_value_width(const char *s, global_varible *g_varible, va_list *va_args, char symbol)
+void	substitution_value_width(const char *s,
+	t_varible *g_varible, va_list *va_args, char symbol)
 {
-	int start;
-	int number_negative;
+	int	start;
+	int	number_negative;
 
 	start = 0;
 	number_negative = 0;
@@ -47,8 +48,9 @@ void	substitution_value_width(const char *s, global_varible *g_varible, va_list 
 	}
 	va_end(*va_args);
 }
-// строка начинается с флага
-void	substitution_value_accuracy(const char *s, global_varible *g_varible, va_list *va_args)
+
+void	substitution_value_accuracy(const char *s,
+	t_varible *g_varible, va_list *va_args)
 {
 	int start;
 
@@ -60,10 +62,7 @@ void	substitution_value_accuracy(const char *s, global_varible *g_varible, va_li
 	else
 	{
 		if (s[start + 1] == '*')
-		{
 			g_varible->accuracy = va_arg(*va_args, int);
-			// printf("accuracy: %d\n", g_varible->accuracy);
-		}
 	}
 	va_end(*va_args);
 }
